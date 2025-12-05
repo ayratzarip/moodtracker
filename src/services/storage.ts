@@ -25,6 +25,12 @@ declare global {
 const tg = window.Telegram?.WebApp;
 
 class CloudStorageService {
+  private checkTelegramWebApp(): void {
+    if (!tg || !tg.CloudStorage) {
+      throw new Error('Telegram WebApp is not available. Please run this app in Telegram.');
+    }
+  }
+
   private getMonthKey(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -39,9 +45,10 @@ class CloudStorageService {
   }
 
   async getMonthData(date: Date): Promise<MonthData> {
+    this.checkTelegramWebApp();
     return new Promise((resolve, reject) => {
       const key = this.getMonthKey(date);
-      tg.CloudStorage.getItem(key, (error, value) => {
+      tg!.CloudStorage.getItem(key, (error, value) => {
         if (error) {
           reject(error);
         } else {
@@ -57,10 +64,11 @@ class CloudStorageService {
   }
 
   async setMonthData(date: Date, data: MonthData): Promise<void> {
+    this.checkTelegramWebApp();
     return new Promise((resolve, reject) => {
       const key = this.getMonthKey(date);
       const value = JSON.stringify(data);
-      tg.CloudStorage.setItem(key, value, (error, success) => {
+      tg!.CloudStorage.setItem(key, value, (error, success) => {
         if (error || !success) {
           reject(error || 'Failed to save data');
         } else {
@@ -114,8 +122,9 @@ class CloudStorageService {
   }
 
   async getUserSettings(): Promise<UserSettings> {
+    this.checkTelegramWebApp();
     return new Promise((resolve, reject) => {
-      tg.CloudStorage.getItem('user_settings', (error, value) => {
+      tg!.CloudStorage.getItem('user_settings', (error, value) => {
         if (error) {
           reject(error);
         } else {
@@ -131,9 +140,10 @@ class CloudStorageService {
   }
 
   async saveUserSettings(settings: UserSettings): Promise<void> {
+    this.checkTelegramWebApp();
     return new Promise((resolve, reject) => {
       const value = JSON.stringify(settings);
-      tg.CloudStorage.setItem('user_settings', value, (error, success) => {
+      tg!.CloudStorage.setItem('user_settings', value, (error, success) => {
         if (error || !success) {
           reject(error || 'Failed to save settings');
         } else {

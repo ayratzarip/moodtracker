@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Home from './pages/Home';
 import Settings from './pages/Settings';
@@ -22,7 +22,12 @@ function App() {
       .then(settings => {
         setIsOnboarded(settings.onboarded);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error loading user settings:', error);
+        // If Telegram WebApp is not available, show error message
+        if (error?.message?.includes('Telegram WebApp is not available')) {
+          console.error('This app requires Telegram WebApp to run. Please open it in Telegram.');
+        }
         setIsOnboarded(false);
       });
   }, []);
@@ -38,25 +43,23 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        {!isOnboarded ? (
-          <>
-            <Route path="/settings" element={<Settings isOnboarding={true} onComplete={() => setIsOnboarded(true)} />} />
-            <Route path="*" element={<Navigate to="/settings" replace />} />
-          </>
-        ) : (
-          <>
-            <Route path="/" element={<Home />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/chart" element={<ChartPage />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/input" element={<InputWizard />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </>
-        )}
-      </Routes>
-    </Router>
+    <Routes>
+      {!isOnboarded ? (
+        <>
+          <Route path="/settings" element={<Settings isOnboarding={true} onComplete={() => setIsOnboarded(true)} />} />
+          <Route path="*" element={<Navigate to="/settings" replace />} />
+        </>
+      ) : (
+        <>
+          <Route path="/" element={<Home />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/chart" element={<ChartPage />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/input" element={<InputWizard />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </>
+      )}
+    </Routes>
   );
 }
 
