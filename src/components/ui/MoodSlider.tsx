@@ -8,23 +8,35 @@ interface MoodSliderProps {
 const MoodSlider = ({ value, onChange }: MoodSliderProps) => {
   const [currentValue, setCurrentValue] = useState(value);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isInitializedRef = useRef(false);
   const itemHeight = 80; // Высота одного элемента
   const visibleItems = 5; // Количество видимых элементов (центральный + по 2 с каждой стороны)
 
-  const values = Array.from({ length: 11 }, (_, i) => i - 5); // От -5 до +5
+  // Положительные вверху, отрицательные внизу: +5, +4, ..., 0, ..., -4, -5
+  const values = Array.from({ length: 11 }, (_, i) => 5 - i); // От +5 до -5
 
   useEffect(() => {
     setCurrentValue(value);
-    scrollToValue(value);
+    // При первом рендере используем 'auto' для мгновенной прокрутки
+    // При последующих изменениях используем 'smooth'
+    if (!isInitializedRef.current) {
+      // Небольшая задержка для гарантии, что DOM готов
+      setTimeout(() => {
+        scrollToValue(value, 'auto');
+        isInitializedRef.current = true;
+      }, 0);
+    } else {
+      scrollToValue(value, 'smooth');
+    }
   }, [value]);
 
-  const scrollToValue = (val: number) => {
+  const scrollToValue = (val: number, behavior: ScrollBehavior = 'smooth') => {
     if (scrollContainerRef.current) {
       const index = values.indexOf(val);
       const scrollPosition = index * itemHeight;
       scrollContainerRef.current.scrollTo({
         top: scrollPosition,
-        behavior: 'smooth',
+        behavior,
       });
     }
   };
