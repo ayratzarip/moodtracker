@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface MoodSliderProps {
   value: number;
@@ -7,88 +7,101 @@ interface MoodSliderProps {
 
 const MoodSlider = ({ value, onChange }: MoodSliderProps) => {
   const [currentValue, setCurrentValue] = useState(value);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const itemHeight = 80; // Высота одного элемента
+  const visibleItems = 5; // Количество видимых элементов (центральный + по 2 с каждой стороны)
 
-  const moodLabels: Record<string, { label: string; emoji: string; color: string }> = {
-    '-5': { label: 'Тяжелая депрессия', emoji: '😞', color: 'text-red-600' },
-    '-4': { label: 'Сильная депрессия', emoji: '😔', color: 'text-red-500' },
-    '-3': { label: 'Депрессия', emoji: '😟', color: 'text-orange-600' },
-    '-2': { label: 'Легкая депрессия', emoji: '😕', color: 'text-orange-500' },
-    '-1': { label: 'Немного грустно', emoji: '🙁', color: 'text-yellow-600' },
-    '0': { label: 'Ровное состояние', emoji: '😐', color: 'text-gray-600' },
-    '1': { label: 'Хорошо', emoji: '🙂', color: 'text-green-600' },
-    '2': { label: 'Приподнятое', emoji: '😊', color: 'text-green-500' },
-    '3': { label: 'Отлично', emoji: '😄', color: 'text-blue-600' },
-    '4': { label: 'Эйфория', emoji: '😃', color: 'text-blue-500' },
-    '5': { label: 'Мания/Гипомания', emoji: '🤩', color: 'text-purple-600' },
+  const values = Array.from({ length: 11 }, (_, i) => i - 5); // От -5 до +5
+
+  useEffect(() => {
+    setCurrentValue(value);
+    scrollToValue(value);
+  }, [value]);
+
+  const scrollToValue = (val: number) => {
+    if (scrollContainerRef.current) {
+      const index = values.indexOf(val);
+      const scrollPosition = index * itemHeight;
+      scrollContainerRef.current.scrollTo({
+        top: scrollPosition,
+        behavior: 'smooth',
+      });
+    }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value);
-    setCurrentValue(newValue);
-    onChange(newValue);
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      const scrollTop = scrollContainerRef.current.scrollTop;
+      const index = Math.round(scrollTop / itemHeight);
+      const newValue = values[Math.max(0, Math.min(index, values.length - 1))];
+      
+      if (newValue !== currentValue) {
+        setCurrentValue(newValue);
+        onChange(newValue);
+      }
+    }
   };
 
-  const mood = moodLabels[currentValue.toString()];
+  const handleItemClick = (val: number) => {
+    setCurrentValue(val);
+    onChange(val);
+    scrollToValue(val);
+  };
 
   return (
-    <div className="w-full px-6">
-      <div className="text-center mb-8">
-        <div className="text-6xl mb-4">{mood.emoji}</div>
-        <div className={`text-2xl font-bold mb-2 ${mood.color}`}>
-          {currentValue > 0 ? '+' : ''}{currentValue}
-        </div>
-        <div className="text-lg tg-text">{mood.label}</div>
-      </div>
-
-      <div className="relative mb-4">
-        <input
-          type="range"
-          min="-5"
-          max="5"
-          step="1"
-          value={currentValue}
-          onChange={handleChange}
-          className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+    <div className="w-full flex items-center justify-center">
+      <div className="relative w-full max-w-xs">
+        {/* Центральная линия-индикатор */}
+        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-300 z-10 pointer-events-none" />
+        
+        {/* Контейнер с прокруткой */}
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
           style={{
-            background: `linear-gradient(to right,
-              #dc2626 0%,
-              #ea580c 20%,
-              #ca8a04 40%,
-              #6b7280 50%,
-              #16a34a 60%,
-              #2563eb 80%,
-              #9333ea 100%)`
+            height: `${visibleItems * itemHeight}px`,
+            scrollSnapType: 'y mandatory',
           }}
-        />
-      </div>
-
-      <div className="flex justify-between text-xs tg-hint px-1">
-        <span>-5</span>
-        <span>-3</span>
-        <span>0</span>
-        <span>+3</span>
-        <span>+5</span>
+        >
+          {/* Верхний отступ для центрирования */}
+          <div style={{ height: `${(visibleItems - 1) / 2 * itemHeight}px` }} />
+          
+          {/* Элементы с цифрами */}
+          {values.map((val) => {
+            const isSelected = val === currentValue;
+            return (
+              <div
+                key={val}
+                onClick={() => handleItemClick(val)}
+                className="flex items-center justify-center cursor-pointer snap-center transition-all duration-200"
+                style={{ height: `${itemHeight}px` }}
+              >
+                <span
+                  className={`font-medium transition-all duration-200 ${
+                    isSelected
+                      ? 'text-6xl text-black font-bold'
+                      : 'text-2xl text-gray-400'
+                  }`}
+                >
+                  {val > 0 ? `+${val}` : val}
+                </span>
+              </div>
+            );
+          })}
+          
+          {/* Нижний отступ для центрирования */}
+          <div style={{ height: `${(visibleItems - 1) / 2 * itemHeight}px` }} />
+        </div>
       </div>
 
       <style>{`
-        input[type="range"]::-webkit-slider-thumb {
-          appearance: none;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          background: white;
-          cursor: pointer;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
-
-        input[type="range"]::-moz-range-thumb {
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          background: white;
-          cursor: pointer;
-          border: none;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
     </div>
