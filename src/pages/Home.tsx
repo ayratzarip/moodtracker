@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Modal, Placeholder, Spinner } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import { storageService } from '../services/storage';
 
@@ -40,57 +41,66 @@ const Home = () => {
   return (
     <Layout title="Bipolar Mood Tracker">
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-140px)] px-6">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold tg-text mb-2">
-            Как прошел сегодняшний день?
-          </h2>
-          <p className="tg-hint text-sm">
-            Оцените ваше состояние от -5 до +5
-          </p>
-        </div>
+        {loading ? (
+          <Spinner size="l" />
+        ) : (
+          <>
+            <Placeholder
+              header="Как прошел сегодняшний день?"
+              description="Оцените ваше состояние от -5 до +5"
+              action={
+                <Button
+                  size="l"
+                  mode="filled"
+                  stretched
+                  onClick={handleButtonClick}
+                >
+                  {hasEntry ? 'Изменить оценку' : 'Оценить день'}
+                </Button>
+              }
+            />
 
-        <button
-          onClick={handleButtonClick}
-          disabled={loading}
-          className="tg-button px-8 py-4 rounded-lg text-lg font-medium shadow-lg transition-transform active:scale-95 disabled:opacity-50"
-        >
-          {loading ? 'Загрузка...' : hasEntry ? 'Изменить оценку' : 'Оценить день'}
-        </button>
-
-        {hasEntry && (
-          <p className="mt-4 tg-hint text-sm">
-            Оценка за сегодня уже стоит
-          </p>
+            {hasEntry && (
+              <p className="mt-4 text-center" style={{ color: 'var(--tgui--hint_color)' }}>
+                Оценка за сегодня уже стоит
+              </p>
+            )}
+          </>
         )}
       </div>
 
-      {/* Confirmation Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="tg-bg rounded-lg p-6 max-w-sm w-full shadow-xl">
-            <h3 className="text-lg font-semibold tg-text mb-3">
-              Изменить оценку?
-            </h3>
-            <p className="tg-hint text-sm mb-6">
-              Оценка за сегодня уже стоит. Хотите изменить?
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowModal(false)}
-                className="flex-1 px-4 py-2 rounded-lg tg-bg-secondary tg-text font-medium"
-              >
-                Отмена
-              </button>
-              <button
-                onClick={handleEditConfirm}
-                className="flex-1 px-4 py-2 rounded-lg tg-button font-medium"
-              >
-                Изменить
-              </button>
-            </div>
+      <Modal
+        open={showModal}
+        onOpenChange={setShowModal}
+        header={
+          <Modal.Header>
+            Изменить оценку?
+            <Modal.Close />
+          </Modal.Header>
+        }
+      >
+        <div style={{ padding: '16px' }}>
+          <p style={{ marginBottom: '16px', color: 'var(--tgui--hint_color)' }}>
+            Оценка за сегодня уже стоит. Хотите изменить?
+          </p>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <Button
+              mode="outline"
+              stretched
+              onClick={() => setShowModal(false)}
+            >
+              Отмена
+            </Button>
+            <Button
+              mode="filled"
+              stretched
+              onClick={handleEditConfirm}
+            >
+              Изменить
+            </Button>
           </div>
         </div>
-      )}
+      </Modal>
     </Layout>
   );
 };

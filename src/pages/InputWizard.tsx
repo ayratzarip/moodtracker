@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Button, Spinner, Section } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import MoodSlider from '../components/ui/MoodSlider';
 import { storageService } from '../services/storage';
@@ -53,7 +54,7 @@ const InputWizard = () => {
     return (
       <Layout title="Оценка дня" showNav={false}>
         <div className="flex items-center justify-center min-h-[calc(100vh-140px)]">
-          <p className="tg-text">Загрузка...</p>
+          <Spinner size="l" />
         </div>
       </Layout>
     );
@@ -68,44 +69,60 @@ const InputWizard = () => {
               <MoodSlider value={score} onChange={setScore} />
             </div>
             <div className="w-full px-6">
-              <button
+              <Button
+                size="l"
+                mode="filled"
+                stretched
                 onClick={handleNext}
-                className="w-full tg-button py-4 rounded-lg text-lg font-medium shadow-lg transition-transform active:scale-95"
               >
                 Далее
-              </button>
+              </Button>
             </div>
           </>
         ) : (
           <>
             <div className="w-full flex-1 px-6">
-              <p className="tg-hint text-sm mb-4">
-                Добавьте заметку о дне (необязательно)
-              </p>
-              <textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Что произошло сегодня? Какие события или чувства повлияли на ваше настроение?"
-                className="w-full h-64 p-4 rounded-lg tg-bg-secondary tg-text border border-gray-300 focus:outline-none focus:border-blue-500 resize-none"
-                maxLength={500}
-              />
-              <p className="text-xs tg-hint text-right mt-2">
-                {note.length}/500
-              </p>
+              <Section header="Добавьте заметку о дне (необязательно)">
+                <textarea
+                  placeholder="Что произошло сегодня? Какие события или чувства повлияли на ваше настроение?"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  maxLength={500}
+                  rows={8}
+                  style={{
+                    width: '100%',
+                    padding: '12px',
+                    fontSize: '16px',
+                    backgroundColor: 'var(--tgui--field_background)',
+                    color: 'var(--tgui--text_color)',
+                    border: 'none',
+                    borderRadius: '12px',
+                    resize: 'none',
+                    fontFamily: 'inherit',
+                  }}
+                />
+                <p className="text-xs text-right mt-2" style={{ color: 'var(--tgui--hint_color)' }}>
+                  {note.length}/500
+                </p>
+              </Section>
             </div>
             <div className="w-full px-6 space-y-3">
-              <button
+              <Button
+                size="l"
+                mode="filled"
+                stretched
                 onClick={handleSave}
-                className="w-full tg-button py-4 rounded-lg text-lg font-medium shadow-lg transition-transform active:scale-95"
               >
                 Сохранить
-              </button>
-              <button
+              </Button>
+              <Button
+                size="m"
+                mode="outline"
+                stretched
                 onClick={() => setStep(1)}
-                className="w-full tg-bg-secondary tg-text py-3 rounded-lg font-medium"
               >
                 Назад
-              </button>
+              </Button>
             </div>
           </>
         )}

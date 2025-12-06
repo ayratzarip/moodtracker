@@ -64,7 +64,7 @@ const MoodSlider = ({ value, onChange }: MoodSliderProps) => {
     <div className="w-full flex items-center justify-center">
       <div className="relative w-full max-w-xs">
         {/* Центральная линия-индикатор */}
-        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-gray-300 z-10 pointer-events-none" />
+        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-border z-10 pointer-events-none" />
         
         {/* Контейнер с прокруткой */}
         <div
@@ -92,8 +92,8 @@ const MoodSlider = ({ value, onChange }: MoodSliderProps) => {
                 <span
                   className={`font-medium transition-all duration-200 ${
                     isSelected
-                      ? 'text-6xl text-black font-bold'
-                      : 'text-2xl text-gray-400'
+                      ? 'text-6xl text-text font-bold'
+                      : 'text-2xl text-text-muted'
                   }`}
                 >
                   {val > 0 ? `+${val}` : val}

@@ -3,13 +3,73 @@
 @tailwind utilities;
 
 :root {
-  --tg-theme-bg-color: #ffffff;
-  --tg-theme-text-color: #000000;
-  --tg-theme-hint-color: #999999;
-  --tg-theme-link-color: #2481cc;
-  --tg-theme-button-color: #2481cc;
-  --tg-theme-button-text-color: #ffffff;
-  --tg-theme-secondary-bg-color: #f4f4f5;
+  /* hsl (fallback color) */
+  --bg-dark: hsl(2 20% 1%);
+  --bg: hsl(2 13% 5%);
+  --bg-light: hsl(2 7% 9%);
+  --text: hsl(2 42% 96%);
+  --text-muted: hsl(2 6% 70%);
+  --highlight: hsl(2 4% 40%);
+  --border: hsl(2 5% 29%);
+  --border-muted: hsl(2 7% 19%);
+  --primary: hsl(0 66% 75%);
+  --secondary: hsl(183 52% 57%);
+  --danger: hsl(9 26% 64%);
+  --warning: hsl(52 19% 57%);
+  --success: hsl(146 17% 59%);
+  --info: hsl(217 28% 65%);
+
+  /* oklch */
+  --bg-dark: oklch(0.1 0.005 20);
+  --bg: oklch(0.15 0.005 20);
+  --bg-light: oklch(0.2 0.005 20);
+  --text: oklch(0.96 0.01 20);
+  --text-muted: oklch(0.76 0.01 20);
+  --highlight: oklch(0.5 0.01 20);
+  --border: oklch(0.4 0.01 20);
+  --border-muted: oklch(0.3 0.01 20);
+  --primary: oklch(0.76 0.1 20);
+  --secondary: oklch(0.76 0.1 200);
+  --danger: oklch(0.7 0.05 30);
+  --warning: oklch(0.7 0.05 100);
+  --success: oklch(0.7 0.05 160);
+  --info: oklch(0.7 0.05 260);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* hsl (fallback color) */
+    --bg-dark: hsl(2 9% 90%);
+    --bg: hsl(2 20% 95%);
+    --bg-light: hsl(2 100% 100%);
+    --text: hsl(1 23% 5%);
+    --text-muted: hsl(2 5% 29%);
+    --highlight: hsl(2 100% 100%);
+    --border: hsl(2 3% 51%);
+    --border-muted: hsl(2 5% 63%);
+    --primary: hsl(357 44% 32%);
+    --secondary: hsl(183 100% 9%);
+    --danger: hsl(9 21% 41%);
+    --warning: hsl(52 23% 34%);
+    --success: hsl(147 19% 36%);
+    --info: hsl(217 22% 41%);
+
+    /* oklch */
+    --bg-dark: oklch(0.92 0.005 20);
+    --bg: oklch(0.96 0.005 20);
+    --bg-light: oklch(1 0.005 20);
+    --text: oklch(0.15 0.01 20);
+    --text-muted: oklch(0.4 0.01 20);
+    --highlight: oklch(1 0.01 20);
+    --border: oklch(0.6 0.01 20);
+    --border-muted: oklch(0.7 0.01 20);
+    --primary: oklch(0.4 0.1 20);
+    --secondary: oklch(0.4 0.1 200);
+    --danger: oklch(0.5 0.05 30);
+    --warning: oklch(0.5 0.05 100);
+    --success: oklch(0.5 0.05 160);
+    --info: oklch(0.5 0.05 260);
+  }
 }
 
 body {
@@ -20,8 +80,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--tg-theme-bg-color);
-  color: var(--tg-theme-text-color);
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 #root {
@@ -32,27 +92,27 @@ body {
 
 @layer utilities {
   .tg-bg {
-    background-color: var(--tg-theme-bg-color);
+    background-color: var(--bg);
   }
 
   .tg-bg-secondary {
-    background-color: var(--tg-theme-secondary-bg-color);
+    background-color: var(--bg-light);
   }
 
   .tg-text {
-    color: var(--tg-theme-text-color);
+    color: var(--text);
   }
 
   .tg-hint {
-    color: var(--tg-theme-hint-color);
+    color: var(--text-muted);
   }
 
   .tg-link {
-    color: var(--tg-theme-link-color);
+    color: var(--primary);
   }
 
   .tg-button {
-    background-color: var(--tg-theme-button-color);
-    color: var(--tg-theme-button-text-color);
+    background-color: var(--primary);
+    color: var(--bg);
   }
 }

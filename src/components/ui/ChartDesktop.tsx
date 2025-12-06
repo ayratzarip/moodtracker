@@ -9,13 +9,13 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload as { date: string; score: number; fullDate: string; note: string };
     return (
-      <div className="tg-bg-secondary border border-gray-300 rounded-lg p-4 shadow-lg max-w-xs">
+      <div className="tg-bg-secondary border border-border rounded-lg p-4 shadow-lg max-w-xs">
         <p className="font-semibold tg-text mb-2">{data.fullDate}</p>
         <p className="tg-text mb-2">
           Оценка: <span className="font-bold">{data.score > 0 ? '+' : ''}{data.score}</span>
         </p>
         {data.note && (
-          <div className="mt-2 pt-2 border-t border-gray-300">
+          <div className="mt-2 pt-2 border-t border-border">
             <p className="text-sm tg-hint font-semibold mb-1">Примечание:</p>
             <p className="text-sm tg-text">{data.note}</p>
           </div>
@@ -48,21 +48,21 @@ const ChartDesktop = ({ data }: ChartDesktopProps) => {
           <XAxis
             dataKey="date"
             tick={{ fontSize: 14 }}
-            stroke="var(--tg-theme-hint-color)"
+            stroke="var(--text-muted)"
           />
           <YAxis
             domain={[-5, 5]}
             ticks={[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]}
             tick={{ fontSize: 14 }}
-            stroke="var(--tg-theme-hint-color)"
+            stroke="var(--text-muted)"
           />
           <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
             dataKey="score"
-            stroke="var(--tg-theme-button-color)"
+            stroke="var(--primary)"
             strokeWidth={3}
-            dot={{ fill: 'var(--tg-theme-button-color)', r: 5 }}
+            dot={{ fill: 'var(--primary)', r: 5 }}
             activeDot={{ r: 7 }}
           />
         </LineChart>

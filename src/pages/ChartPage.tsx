@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Button, Placeholder, Spinner, Section } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import ChartMobile from '../components/ui/ChartMobile';
 import ChartDesktop from '../components/ui/ChartDesktop';
@@ -60,7 +61,7 @@ const ChartPage = () => {
     return (
       <Layout title="График настроения">
         <div className="flex items-center justify-center min-h-[calc(100vh-140px)]">
-          <p className="tg-text">Загрузка данных...</p>
+          <Spinner size="l" />
         </div>
       </Layout>
     );
@@ -72,13 +73,12 @@ const ChartPage = () => {
     <Layout title="График настроения">
       <div className="py-6 px-4">
         {!hasData ? (
-          <div className="text-center py-12">
-            <p className="text-6xl mb-4">📊</p>
-            <p className="tg-text text-lg mb-2">Нет данных для отображения</p>
-            <p className="tg-hint text-sm">
-              Начните оценивать свое настроение, чтобы увидеть график
-            </p>
-          </div>
+          <Placeholder
+            header="Нет данных для отображения"
+            description="Начните оценивать свое настроение, чтобы увидеть график"
+          >
+            <div style={{ fontSize: '64px' }}>📊</div>
+          </Placeholder>
         ) : (
           <>
             {isDesktop ? (
@@ -87,30 +87,34 @@ const ChartPage = () => {
               <ChartMobile data={data} />
             )}
 
-            <div className="mt-6">
-              <button
+            <div className="mt-6 px-4">
+              <Button
+                size="l"
+                mode="filled"
+                stretched
                 onClick={handleExport}
-                disabled={exporting}
-                className="w-full tg-button py-4 rounded-lg text-lg font-medium shadow-lg transition-transform active:scale-95 disabled:opacity-50"
+                loading={exporting}
               >
-                {exporting ? 'Экспорт...' : '🤖 Анализ AI (Экспорт данных)'}
-              </button>
-              <p className="text-xs tg-hint text-center mt-3">
+                🤖 Анализ AI (Экспорт данных)
+              </Button>
+              <p className="text-xs text-center mt-3" style={{ color: 'var(--tgui--hint_color)' }}>
                 Экспортируйте данные для анализа с помощью ChatGPT или другого AI-инструмента
               </p>
             </div>
 
-            <div className="mt-6 tg-bg-secondary rounded-lg p-4">
-              <p className="text-sm tg-text mb-2">
-                <strong>Всего записей:</strong> {Object.keys(data).length}
-              </p>
-              <p className="text-sm tg-hint">
-                График показывает динамику вашего настроения за последнее время.
-                {isDesktop
-                  ? ' Наведите курсор на точку, чтобы увидеть детали и примечания.'
-                  : ' Откройте на компьютере для детального просмотра с примечаниями.'}
-              </p>
-            </div>
+            <Section className="mt-6">
+              <div style={{ padding: '12px' }}>
+                <p className="text-sm mb-2" style={{ color: 'var(--tgui--text_color)' }}>
+                  <strong>Всего записей:</strong> {Object.keys(data).length}
+                </p>
+                <p className="text-sm" style={{ color: 'var(--tgui--hint_color)' }}>
+                  График показывает динамику вашего настроения за последнее время.
+                  {isDesktop
+                    ? ' Наведите курсор на точку, чтобы увидеть детали и примечания.'
+                    : ' Откройте на компьютере для детального просмотра с примечаниями.'}
+                </p>
+              </div>
+            </Section>
           </>
         )}
       </div>
