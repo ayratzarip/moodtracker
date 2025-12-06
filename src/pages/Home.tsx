@@ -39,7 +39,7 @@ const Home = () => {
   };
 
   return (
-    <Layout title="Bipolar Mood Tracker">
+    <Layout title="Трекер настроения">
       <div className="flex flex-col items-center justify-center min-h-[calc(100vh-140px)] px-6">
         {loading ? (
           <Spinner size="l" />

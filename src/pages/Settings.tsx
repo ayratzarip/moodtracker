@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, Section, Spinner, Placeholder } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
+import TimePicker from '../components/ui/TimePicker';
 import { storageService } from '../services/storage';
 import { setupReminder } from '../services/notifications';
 
@@ -92,20 +93,7 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
             header="Время напоминания"
             footer="Вы будете получать сообщение каждый день в это время"
           >
-            <input
-              type="time"
-              value={time}
-              onChange={(e) => setTime(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px',
-                fontSize: '16px',
-                backgroundColor: 'var(--tgui--field_background)',
-                color: 'var(--tgui--text_color)',
-                border: 'none',
-                borderRadius: '12px',
-              }}
-            />
+            <TimePicker value={time} onChange={setTime} />
           </Section>
 
           <Section>
