@@ -4,31 +4,50 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'media',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+      },
       colors: {
-        bg: {
-          DEFAULT: 'var(--bg)',
-          dark: 'var(--bg-dark)',
-          light: 'var(--bg-light)',
+        // Grayscale
+        gray: {
+          100: 'hsl(0, 0%, 100%)',
+          95: 'hsl(0, 0%, 95%)',
+          90: 'hsl(0, 0%, 90%)',
+          85: 'hsl(0, 0%, 85%)',
+          60: 'hsl(0, 0%, 60%)',
+          35: 'hsl(0, 0%, 35%)',
+          10: 'hsl(0, 0%, 10%)',
+          5: 'hsl(0, 0%, 5%)',
+          0: 'hsl(0, 0%, 0%)',
         },
-        text: {
-          DEFAULT: 'var(--text)',
-          muted: 'var(--text-muted)',
+        // Brand Accent (Blue)
+        brand: {
+          10: 'hsl(222, 76%, 10%)',
+          30: 'hsl(222, 76%, 30%)',
+          70: 'hsl(222, 76%, 70%)',
+          90: 'hsl(222, 76%, 90%)',
         },
-        border: {
-          DEFAULT: 'var(--border)',
-          muted: 'var(--border-muted)',
-        },
-        primary: 'var(--primary)',
-        shadow: 'var(--shadow)',
-        'shadow-hover': 'var(--shadow-hover)',
+      },
+      fontSize: {
+        'h1': ['1.125rem', { lineHeight: '1.2', fontWeight: '700' }],
+        'h2': ['1rem', { lineHeight: '1.2', fontWeight: '700' }],
+        'body': ['1rem', { lineHeight: '1.5', fontWeight: '400' }],
+        'caption': ['0.875rem', { lineHeight: '1.5', fontWeight: '400' }],
       },
       boxShadow: {
-        'tg': '0 2px 8px var(--shadow)',
-        'tg-hover': '0 6px 16px var(--shadow-hover)',
-        'tg-button': '0 4px 12px var(--shadow), 0 0 0 1px var(--border) inset, 0 2px 4px rgba(0, 0, 0, 0.1) inset',
-        'tg-button-hover': '0 6px 16px var(--shadow-hover), 0 0 0 1px var(--border) inset, 0 2px 4px rgba(0, 0, 0, 0.15) inset',
+        'sm': '0 2px 6px rgba(0, 0, 0, 0.05)',
+        'card': '0 2px 6px rgba(0, 0, 0, 0.05)',
+      },
+      borderRadius: {
+        'xl': '12px',
+        '2xl': '16px',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
       },
     },
   },

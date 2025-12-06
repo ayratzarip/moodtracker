@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Modal, Placeholder, Spinner } from '@telegram-apps/telegram-ui';
+import { Modal, Spinner } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import { storageService } from '../services/storage';
 
@@ -40,31 +40,33 @@ const Home = () => {
 
   return (
     <Layout title="Трекер настроения">
-      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-140px)] px-6">
+      <div className="flex flex-col gap-6">
         {loading ? (
-          <Spinner size="l" />
+          <div className="flex items-center justify-center min-h-[400px]">
+            <Spinner size="l" />
+          </div>
         ) : (
           <>
-            <Placeholder
-              header="Как прошел сегодняшний день?"
-              description="Оцените ваше состояние от -5 до +5"
-              action={
-                <Button
-                  size="l"
-                  mode="filled"
-                  stretched
-                  onClick={handleButtonClick}
-                >
-                  {hasEntry ? 'Изменить оценку' : 'Оценить день'}
-                </Button>
-              }
-            />
-
-            {hasEntry && (
-              <p className="mt-4 text-center" style={{ color: 'var(--tgui--hint_color)' }}>
-                Оценка за сегодня уже стоит
+            {/* Main Action Card */}
+            <div className="card-lg">
+              <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-2">
+                Как прошел сегодняшний день?
+              </h2>
+              <p className="text-caption mb-6">
+                Оцените ваше состояние от -5 до +5
               </p>
-            )}
+              <button
+                onClick={handleButtonClick}
+                className="btn-primary w-full"
+              >
+                {hasEntry ? 'Изменить оценку' : 'Оценить день'}
+              </button>
+              {hasEntry && (
+                <p className="text-caption text-center mt-4">
+                  Оценка за сегодня уже стоит
+                </p>
+              )}
+            </div>
           </>
         )}
       </div>
@@ -79,25 +81,23 @@ const Home = () => {
           </Modal.Header>
         }
       >
-        <div style={{ padding: '16px' }}>
-          <p style={{ marginBottom: '16px', color: 'var(--tgui--hint_color)' }}>
+        <div className="p-6">
+          <p className="text-body text-gray-0 dark:text-gray-100 mb-6">
             Оценка за сегодня уже стоит. Хотите изменить?
           </p>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <Button
-              mode="outline"
-              stretched
+          <div className="flex gap-3">
+            <button
               onClick={() => setShowModal(false)}
+              className="btn-secondary flex-1"
             >
               Отмена
-            </Button>
-            <Button
-              mode="filled"
-              stretched
+            </button>
+            <button
               onClick={handleEditConfirm}
+              className="btn-primary flex-1"
             >
               Изменить
-            </Button>
+            </button>
           </div>
         </div>
       </Modal>

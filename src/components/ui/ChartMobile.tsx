@@ -15,41 +15,42 @@ const ChartMobile = ({ data }: ChartMobileProps) => {
     }));
 
   return (
-    <div>
-      <div className="tg-bg-secondary rounded-lg p-4 mb-4">
-        <p className="text-sm tg-hint text-center">
+    <div className="flex flex-col gap-4">
+      <div className="card">
+        <p className="text-caption text-center">
           📱 Для детального анализа и удобного просмотра откройте Telegram на компьютере
         </p>
       </div>
 
-      <div className="tg-bg-secondary rounded-lg p-4">
+      <div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+            <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="hsl(0, 0%, 85%)" />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 12 }}
-              stroke="var(--tg-theme-hint-color)"
+              tick={{ fontSize: 12, fill: 'hsl(0, 0%, 60%)' }}
+              stroke="hsl(0, 0%, 85%)"
             />
             <YAxis
               domain={[-5, 5]}
               ticks={[-5, -3, 0, 3, 5]}
-              tick={{ fontSize: 12 }}
-              stroke="var(--tg-theme-hint-color)"
+              tick={{ fontSize: 12, fill: 'hsl(0, 0%, 60%)' }}
+              stroke="hsl(0, 0%, 85%)"
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'var(--tg-theme-bg-color)',
-                border: '1px solid var(--tg-theme-hint-color)',
-                borderRadius: '8px',
+                backgroundColor: 'hsl(0, 0%, 100%)',
+                border: '1px solid hsl(0, 0%, 85%)',
+                borderRadius: '12px',
+                boxShadow: '0 2px 6px rgba(0, 0, 0, 0.05)',
               }}
             />
             <Line
               type="monotone"
               dataKey="score"
-              stroke="var(--tg-theme-button-color)"
+              stroke="hsl(222, 76%, 70%)"
               strokeWidth={2}
-              dot={{ fill: 'var(--tg-theme-button-color)', r: 4 }}
+              dot={{ fill: 'hsl(222, 76%, 70%)', r: 4 }}
             />
           </LineChart>
         </ResponsiveContainer>

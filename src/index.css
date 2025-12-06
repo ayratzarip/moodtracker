@@ -1,158 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* HSE Dark Mode */
-  --bg-dark: hsl(0 0% 0%);
-  --bg: hsl(0 0% 5%);
-  --bg-light: hsl(0 0% 10%);
-  --text: hsl(0 0% 95%);
-  --text-muted: hsl(0 0% 75%);
-  --border: hsl(0 0% 20%);
-  --border-muted: hsl(0 0% 15%);
-  --primary: hsl(0 0% 95%);
-  --shadow: rgba(0, 0, 0, 0.3);
-  --shadow-hover: rgba(0, 0, 0, 0.5);
+@layer base {
+  * {
+    @apply border-gray-85 dark:border-gray-35;
+  }
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    /* HSE Light Mode */
-    --bg-dark: hsl(0 0% 100%);
-    --bg: hsl(0 0% 95%);
-    --bg-light: hsl(0 0% 90%);
-    --text: hsl(0 0% 5%);
-    --text-muted: hsl(0 0% 30%);
-    --border: hsl(0 0% 80%);
-    --border-muted: hsl(0 0% 85%);
-    --primary: hsl(0 0% 5%);
-    --shadow: rgba(0, 0, 0, 0.1);
-    --shadow-hover: rgba(0, 0, 0, 0.2);
-  }
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--bg-dark);
-  color: var(--text);
+  background-color: theme('colors.gray.95');
+  color: theme('colors.gray.0');
+  overflow: hidden;
+  /* Prevent elastic scrolling on iOS */
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Global button styles with hover effects */
-button,
-[role="button"],
-.tg-button {
-  cursor: pointer;
-  transition: all 0.2s ease;
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: theme('colors.brand.10');
+    color: theme('colors.gray.100');
+  }
 }
 
-button:hover:not(:disabled),
-[role="button"]:hover:not(:disabled),
-.tg-button:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-button:active:not(:disabled),
-[role="button"]:active:not(:disabled),
-.tg-button:active:not(:disabled) {
-  transform: translateY(0);
-}
-
-/* Telegram UI Button overrides */
-[data-tgui="Button"] {
-  border: 1px solid var(--border) !important;
-  box-shadow: 0 4px 12px var(--shadow), 
-              0 0 0 1px var(--border) inset,
-              0 2px 4px rgba(0, 0, 0, 0.1) inset !important;
-  transition: all 0.2s ease !important;
-}
-
-[data-tgui="Button"]:hover:not(:disabled) {
-  box-shadow: 0 6px 16px var(--shadow-hover),
-              0 0 0 1px var(--border) inset,
-              0 2px 4px rgba(0, 0, 0, 0.15) inset !important;
-  transform: translateY(-1px) !important;
-}
-
-[data-tgui="Button"]:active:not(:disabled) {
-  box-shadow: 0 2px 6px var(--shadow),
-              0 0 0 1px var(--border) inset,
-              0 1px 2px rgba(0, 0, 0, 0.2) inset !important;
-  transform: translateY(0) !important;
+/* Safe area support for Telegram Mini Apps */
+@supports (padding: max(0px)) {
+  body {
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
+  }
 }
 
 #root {
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
-@layer utilities {
-  .tg-bg {
-    background-color: var(--bg);
+@layer components {
+  /* Typography Styles */
+  .text-h1 {
+    font-size: 1.125rem;
+    line-height: 1.2;
+    font-weight: 700;
   }
 
-  .tg-bg-secondary {
-    background-color: var(--bg-light);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px var(--shadow);
+  .text-h2 {
+    font-size: 1rem;
+    line-height: 1.2;
+    font-weight: 700;
   }
 
-  .tg-text {
-    color: var(--text);
+  .text-body {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 400;
   }
 
-  .tg-hint {
-    color: var(--text-muted);
+  .text-caption {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 400;
+    color: theme('colors.gray.60');
   }
 
-  .tg-link {
-    color: var(--primary);
+  /* Card Component */
+  .card {
+    @apply rounded-xl p-5 bg-white dark:bg-gray-5 shadow-sm;
   }
 
-  .tg-button {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--text-muted) 100%);
-    color: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 4px 12px var(--shadow), 
-                0 0 0 1px var(--border) inset,
-                0 2px 4px rgba(0, 0, 0, 0.1) inset;
-    transition: all 0.2s ease;
+  .card-lg {
+    @apply rounded-2xl p-6 bg-white dark:bg-gray-5 shadow-sm;
   }
 
-  .tg-button:hover {
-    box-shadow: 0 6px 16px var(--shadow-hover),
-                0 0 0 1px var(--border) inset,
-                0 2px 4px rgba(0, 0, 0, 0.15) inset;
-    transform: translateY(-1px);
+  /* Button Components */
+  .btn-primary {
+    @apply bg-brand-70 text-white rounded-xl px-6 py-3 min-h-[48px] 
+           font-medium text-body transition-all duration-200 
+           active:scale-95 hover:opacity-90;
   }
 
-  .tg-button:active {
-    box-shadow: 0 2px 6px var(--shadow),
-                0 0 0 1px var(--border) inset,
-                0 1px 2px rgba(0, 0, 0, 0.2) inset;
-    transform: translateY(0);
+  .btn-secondary {
+    @apply bg-gray-90 dark:bg-gray-35 text-gray-0 dark:text-gray-100 
+           rounded-xl px-6 py-3 min-h-[48px] font-medium text-body 
+           transition-all duration-200 active:scale-95 hover:opacity-90;
   }
 
-  .tg-border {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 2px 8px var(--shadow);
+  /* Input Components */
+  .input {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-85 dark:border-gray-35
+           bg-white dark:bg-gray-5 text-gray-0 dark:text-gray-100
+           text-body placeholder-gray-60 dark:placeholder-gray-60
+           focus:outline-none focus:ring-2 focus:ring-brand-70 focus:border-transparent
+           transition-all duration-200;
   }
 
-  .tg-border-gradient {
-    border: 1px solid transparent;
-    background: linear-gradient(var(--bg-light), var(--bg-light)) padding-box,
-                linear-gradient(135deg, var(--border), var(--border-muted)) border-box;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px var(--shadow);
+  /* List Item */
+  .list-item {
+    @apply flex items-center justify-between py-4 px-0 border-b border-gray-90 
+           dark:border-gray-35 last:border-b-0;
   }
 }

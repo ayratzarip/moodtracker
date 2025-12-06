@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Section, Spinner, Placeholder } from '@telegram-apps/telegram-ui';
+import { Spinner } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import TimePicker from '../components/ui/TimePicker';
 import { storageService } from '../services/storage';
@@ -71,7 +71,7 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
   if (loading) {
     return (
       <Layout title="Напоминания" showNav={!isOnboarding}>
-        <div className="flex items-center justify-center min-h-[calc(100vh-140px)]">
+        <div className="flex items-center justify-center min-h-[400px]">
           <Spinner size="l" />
         </div>
       </Layout>
@@ -80,41 +80,42 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
 
   return (
     <Layout title={isOnboarding ? 'Добро пожаловать' : 'Напоминания'} showNav={!isOnboarding}>
-      <div className="flex flex-col justify-between min-h-[calc(100vh-140px)] py-8 px-6">
-        <div className="w-full">
-          {isOnboarding && (
-            <Placeholder
-              header="Настройка напоминаний"
-              description="Выберите время, когда вы хотите получать ежедневное напоминание об оценке настроения"
-            />
-          )}
+      <div className="flex flex-col gap-6">
+        {isOnboarding && (
+          <div className="card">
+            <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-2">
+              Настройка напоминаний
+            </h2>
+            <p className="text-caption">
+              Выберите время, когда вы хотите получать ежедневное напоминание об оценке настроения
+            </p>
+          </div>
+        )}
 
-          <Section
-            header="Время напоминания"
-            footer="Вы будете получать сообщение каждый день в это время"
-          >
-            <TimePicker value={time} onChange={setTime} />
-          </Section>
-
-          <Section>
-            <div style={{ padding: '12px', color: 'var(--tgui--hint_color)', fontSize: '14px' }}>
-              💡 <strong>Совет:</strong> Выбирайте время вечером, когда вы можете
-              спокойно оценить прошедший день.
-            </div>
-          </Section>
+        <div className="card-lg">
+          <h3 className="text-h2 text-gray-0 dark:text-gray-100 mb-2">
+            Время напоминания
+          </h3>
+          <p className="text-caption mb-6">
+            Вы будете получать сообщение каждый день в это время
+          </p>
+          <TimePicker value={time} onChange={setTime} />
         </div>
 
-        <div className="w-full px-6" style={{ paddingBottom: '20px' }}>
-          <Button
-            size="l"
-            mode="filled"
-            stretched
-            onClick={handleSave}
-            loading={saving}
-          >
-            Сохранить
-          </Button>
+        <div className="card">
+          <p className="text-caption">
+            💡 <strong>Совет:</strong> Выбирайте время вечером, когда вы можете
+            спокойно оценить прошедший день.
+          </p>
         </div>
+
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="btn-primary w-full"
+        >
+          {saving ? 'Сохранение...' : 'Сохранить'}
+        </button>
       </div>
     </Layout>
   );

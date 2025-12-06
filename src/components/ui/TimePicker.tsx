@@ -71,33 +71,19 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', padding: '20px 0' }}>
+    <div className="flex justify-center items-center gap-5 py-5">
       {/* Hours picker */}
-      <div style={{ position: 'relative', width: '80px' }}>
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            height: '2px',
-            backgroundColor: 'var(--tgui--separator_common)',
-            zIndex: 10,
-            pointerEvents: 'none',
-          }}
-        />
+      <div className="relative w-20">
+        {/* Прямоугольное окошко для выбранного значения */}
+        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-16 bg-transparent rounded-xl border-2 border-gray-85 dark:border-gray-35 z-10 pointer-events-none" />
         <div
           ref={hoursRef}
           onScroll={handleHoursScroll}
+          className="overflow-y-scroll scrollbar-hide"
           style={{
-            overflowY: 'scroll',
             height: `${visibleItems * itemHeight}px`,
             scrollSnapType: 'y mandatory',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
           }}
-          className="scrollbar-hide"
         >
           <div style={{ height: `${(visibleItems - 1) / 2 * itemHeight}px` }} />
           {hoursArray.map((h) => {
@@ -106,23 +92,15 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
               <div
                 key={h}
                 onClick={() => handleHourClick(h)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: `${itemHeight}px`,
-                  cursor: 'pointer',
-                  scrollSnapAlign: 'center',
-                  transition: 'all 0.2s',
-                }}
+                className="flex items-center justify-center cursor-pointer snap-center transition-all duration-200"
+                style={{ height: `${itemHeight}px` }}
               >
                 <span
-                  style={{
-                    fontSize: isSelected ? '48px' : '24px',
-                    fontWeight: isSelected ? 'bold' : 'normal',
-                    color: isSelected ? 'var(--tgui--text_color)' : 'var(--tgui--hint_color)',
-                    transition: 'all 0.2s',
-                  }}
+                  className={`transition-all duration-200 ${
+                    isSelected
+                      ? 'text-5xl font-bold text-gray-0 dark:text-gray-100'
+                      : 'text-2xl font-normal text-gray-60 dark:text-gray-60'
+                  }`}
                 >
                   {String(h).padStart(2, '0')}
                 </span>
@@ -134,42 +112,22 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
       </div>
 
       {/* Separator */}
-      <div
-        style={{
-          fontSize: '32px',
-          color: 'var(--tgui--text_color)',
-          fontWeight: 'bold',
-        }}
-      >
+      <div className="text-3xl font-bold text-gray-0 dark:text-gray-100">
         :
       </div>
 
       {/* Minutes picker */}
-      <div style={{ position: 'relative', width: '80px' }}>
-        <div
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: '50%',
-            transform: 'translateY(-50%)',
-            height: '2px',
-            backgroundColor: 'var(--tgui--separator_common)',
-            zIndex: 10,
-            pointerEvents: 'none',
-          }}
-        />
+      <div className="relative w-20">
+        {/* Прямоугольное окошко для выбранного значения */}
+        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-16 bg-transparent rounded-xl border-2 border-gray-85 dark:border-gray-35 z-10 pointer-events-none" />
         <div
           ref={minutesRef}
           onScroll={handleMinutesScroll}
+          className="overflow-y-scroll scrollbar-hide"
           style={{
-            overflowY: 'scroll',
             height: `${visibleItems * itemHeight}px`,
             scrollSnapType: 'y mandatory',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
           }}
-          className="scrollbar-hide"
         >
           <div style={{ height: `${(visibleItems - 1) / 2 * itemHeight}px` }} />
           {minutesArray.map((m) => {
@@ -178,23 +136,15 @@ const TimePicker = ({ value, onChange }: TimePickerProps) => {
               <div
                 key={m}
                 onClick={() => handleMinuteClick(m)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  height: `${itemHeight}px`,
-                  cursor: 'pointer',
-                  scrollSnapAlign: 'center',
-                  transition: 'all 0.2s',
-                }}
+                className="flex items-center justify-center cursor-pointer snap-center transition-all duration-200"
+                style={{ height: `${itemHeight}px` }}
               >
                 <span
-                  style={{
-                    fontSize: isSelected ? '48px' : '24px',
-                    fontWeight: isSelected ? 'bold' : 'normal',
-                    color: isSelected ? 'var(--tgui--text_color)' : 'var(--tgui--hint_color)',
-                    transition: 'all 0.2s',
-                  }}
+                  className={`transition-all duration-200 ${
+                    isSelected
+                      ? 'text-5xl font-bold text-gray-0 dark:text-gray-100'
+                      : 'text-2xl font-normal text-gray-60 dark:text-gray-60'
+                  }`}
                 >
                   {String(m).padStart(2, '0')}
                 </span>

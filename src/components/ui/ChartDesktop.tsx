@@ -9,15 +9,15 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload as { date: string; score: number; fullDate: string; note: string };
     return (
-      <div className="tg-bg-secondary border border-border rounded-lg p-4 shadow-lg max-w-xs">
-        <p className="font-semibold tg-text mb-2">{data.fullDate}</p>
-        <p className="tg-text mb-2">
+      <div className="card max-w-xs">
+        <p className="text-h2 text-gray-0 dark:text-gray-100 mb-2">{data.fullDate}</p>
+        <p className="text-body text-gray-0 dark:text-gray-100 mb-2">
           Оценка: <span className="font-bold">{data.score > 0 ? '+' : ''}{data.score}</span>
         </p>
         {data.note && (
-          <div className="mt-2 pt-2 border-t border-border">
-            <p className="text-sm tg-hint font-semibold mb-1">Примечание:</p>
-            <p className="text-sm tg-text">{data.note}</p>
+          <div className="mt-2 pt-2 border-t border-gray-85 dark:border-gray-35">
+            <p className="text-caption font-semibold mb-1">Примечание:</p>
+            <p className="text-caption text-gray-0 dark:text-gray-100">{data.note}</p>
           </div>
         )}
       </div>
@@ -41,28 +41,28 @@ const ChartDesktop = ({ data }: ChartDesktopProps) => {
     }));
 
   return (
-    <div className="tg-bg-secondary rounded-lg p-6">
+    <div>
       <ResponsiveContainer width="100%" height={500}>
         <LineChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+          <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="hsl(0, 0%, 85%)" />
           <XAxis
             dataKey="date"
-            tick={{ fontSize: 14 }}
-            stroke="var(--text-muted)"
+            tick={{ fontSize: 14, fill: 'hsl(0, 0%, 60%)' }}
+            stroke="hsl(0, 0%, 85%)"
           />
           <YAxis
             domain={[-5, 5]}
             ticks={[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]}
-            tick={{ fontSize: 14 }}
-            stroke="var(--text-muted)"
+            tick={{ fontSize: 14, fill: 'hsl(0, 0%, 60%)' }}
+            stroke="hsl(0, 0%, 85%)"
           />
           <Tooltip content={<CustomTooltip />} />
           <Line
             type="monotone"
             dataKey="score"
-            stroke="var(--primary)"
+            stroke="hsl(222, 76%, 70%)"
             strokeWidth={3}
-            dot={{ fill: 'var(--primary)', r: 5 }}
+            dot={{ fill: 'hsl(222, 76%, 70%)', r: 5 }}
             activeDot={{ r: 7 }}
           />
         </LineChart>

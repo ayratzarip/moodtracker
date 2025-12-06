@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Button, Placeholder, Spinner, Section } from '@telegram-apps/telegram-ui';
+import { Spinner } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import ChartMobile from '../components/ui/ChartMobile';
 import ChartDesktop from '../components/ui/ChartDesktop';
@@ -60,7 +60,7 @@ const ChartPage = () => {
   if (loading) {
     return (
       <Layout title="График настроения">
-        <div className="flex items-center justify-center min-h-[calc(100vh-140px)]">
+        <div className="flex items-center justify-center min-h-[400px]">
           <Spinner size="l" />
         </div>
       </Layout>
@@ -71,50 +71,49 @@ const ChartPage = () => {
 
   return (
     <Layout title="График настроения">
-      <div className="py-6 px-4">
+      <div className="flex flex-col gap-6">
         {!hasData ? (
-          <Placeholder
-            header="Нет данных для отображения"
-            description="Начните оценивать свое настроение, чтобы увидеть график"
-          >
-            <div style={{ fontSize: '64px' }}>📊</div>
-          </Placeholder>
+          <div className="card-lg text-center">
+            <div className="text-6xl mb-4">📊</div>
+            <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-2">
+              Нет данных для отображения
+            </h2>
+            <p className="text-caption">
+              Начните оценивать свое настроение, чтобы увидеть график
+            </p>
+          </div>
         ) : (
           <>
-            {isDesktop ? (
-              <ChartDesktop data={data} />
-            ) : (
-              <ChartMobile data={data} />
-            )}
-
-            <div className="mt-6 px-4">
-              <Button
-                size="l"
-                mode="filled"
-                stretched
-                onClick={handleExport}
-                loading={exporting}
-              >
-                🤖 Анализ AI (Экспорт данных)
-              </Button>
-              <p className="text-xs text-center mt-3" style={{ color: 'var(--tgui--hint_color)' }}>
-                Экспортируйте данные для анализа с помощью ChatGPT или другого AI-инструмента
-              </p>
+            <div className="card-lg">
+              {isDesktop ? (
+                <ChartDesktop data={data} />
+              ) : (
+                <ChartMobile data={data} />
+              )}
             </div>
 
-            <Section className="mt-6">
-              <div style={{ padding: '12px' }}>
-                <p className="text-sm mb-2" style={{ color: 'var(--tgui--text_color)' }}>
-                  <strong>Всего записей:</strong> {Object.keys(data).length}
-                </p>
-                <p className="text-sm" style={{ color: 'var(--tgui--hint_color)' }}>
-                  График показывает динамику вашего настроения за последнее время.
-                  {isDesktop
-                    ? ' Наведите курсор на точку, чтобы увидеть детали и примечания.'
-                    : ' Откройте на компьютере для детального просмотра с примечаниями.'}
-                </p>
-              </div>
-            </Section>
+            <button
+              onClick={handleExport}
+              disabled={exporting}
+              className="btn-primary w-full"
+            >
+              {exporting ? 'Экспорт...' : '🤖 Анализ AI (Экспорт данных)'}
+            </button>
+            <p className="text-caption text-center">
+              Экспортируйте данные для анализа с помощью ChatGPT или другого AI-инструмента
+            </p>
+
+            <div className="card">
+              <p className="text-body text-gray-0 dark:text-gray-100 mb-2">
+                <strong>Всего записей:</strong> {Object.keys(data).length}
+              </p>
+              <p className="text-caption">
+                График показывает динамику вашего настроения за последнее время.
+                {isDesktop
+                  ? ' Наведите курсор на точку, чтобы увидеть детали и примечания.'
+                  : ' Откройте на компьютере для детального просмотра с примечаниями.'}
+              </p>
+            </div>
           </>
         )}
       </div>

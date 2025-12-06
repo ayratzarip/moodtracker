@@ -34,9 +34,9 @@ function App() {
 
   if (isOnboarded === null) {
     return (
-      <div className="flex items-center justify-center min-h-screen tg-bg">
+      <div className="flex items-center justify-center h-screen w-screen bg-gray-95 dark:bg-brand-10">
         <div className="text-center">
-          <p className="tg-text">Загрузка...</p>
+          <p className="text-body text-gray-0 dark:text-gray-100">Загрузка...</p>
         </div>
       </div>
     );
