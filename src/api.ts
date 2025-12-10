@@ -1,5 +1,5 @@
 // URL от Google Apps Script
-const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycbxxWNb99Q8iejXHZmXVdvjd2V-tMJVZlAeTpE9IHT0nvQYn72_UO3M6OkOGO73kIOJVFA/exec';
+const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby2U9wd2WUtJWGFcg0joCayHowm4tzUn1c61eA5rKf9B3fi8p8XvuC_ioHW_kX9W8smEw/exec';
 
 /**
  * Устанавливает напоминание через Google Apps Script
