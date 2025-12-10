@@ -26,7 +26,7 @@ const BottomNav = () => {
             >
               <span 
                 className={cn(
-                  'text-xl mb-1 transition-all duration-200',
+                  'mb-1 transition-all duration-200',
                   isActive 
                     ? 'opacity-100' // Полная непрозрачность для активной
                     : 'opacity-40 grayscale' // Серые и неактивные
