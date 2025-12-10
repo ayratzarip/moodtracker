@@ -8,20 +8,16 @@ interface ChartDesktopProps {
 const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload as { date: string; score: number; fullDate: string; note: string };
-    return (
-      <div className="card max-w-xs">
-        <p className="text-h2 text-gray-0 dark:text-gray-100 mb-2">{data.fullDate}</p>
-        <p className="text-body text-gray-0 dark:text-gray-100 mb-2">
-          Оценка: <span className="font-bold">{data.score > 0 ? '+' : ''}{data.score}</span>
-        </p>
-        {data.note && (
-          <div className="mt-2 pt-2 border-t border-gray-85 dark:border-gray-35">
-            <p className="text-caption font-semibold mb-1">Примечание:</p>
-            <p className="text-caption text-gray-0 dark:text-gray-100">{data.note}</p>
-          </div>
-        )}
-      </div>
-    );
+    // Показываем только текст примечания, если оно есть
+    if (data.note) {
+      return (
+        <div className="card max-w-xs">
+          <p className="text-body text-gray-0 dark:text-gray-100">{data.note}</p>
+        </div>
+      );
+    }
+    // Если примечания нет, не показываем tooltip
+    return null;
   }
   return null;
 };

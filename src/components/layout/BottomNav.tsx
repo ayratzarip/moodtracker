@@ -21,14 +21,29 @@ const BottomNav = () => {
               key={item.path}
               to={item.path}
               className={cn(
-                'flex flex-col items-center justify-center flex-1 h-full transition-all duration-200',
-                isActive 
-                  ? 'text-brand-70 dark:text-brand-70' 
-                  : 'text-gray-60 dark:text-gray-60'
+                'flex flex-col items-center justify-center flex-1 h-full transition-all duration-200'
               )}
             >
-              <span className="text-2xl mb-1">{item.icon}</span>
-              <span className="text-caption">{item.label}</span>
+              <span 
+                className={cn(
+                  'text-2xl mb-1 transition-all duration-200',
+                  isActive 
+                    ? 'opacity-100' // Полная непрозрачность для активной
+                    : 'opacity-40 grayscale' // Серые и неактивные
+                )}
+              >
+                {item.icon}
+              </span>
+              <span 
+                className={cn(
+                  'text-caption transition-all duration-200',
+                  isActive 
+                    ? 'text-brand-70 dark:text-brand-70 font-semibold' 
+                    : 'text-gray-60 dark:text-gray-60'
+                )}
+              >
+                {item.label}
+              </span>
             </Link>
           );
         })}
