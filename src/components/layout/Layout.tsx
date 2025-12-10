@@ -10,9 +10,28 @@ interface LayoutProps {
 
 const Layout = ({ children, title, showNav = true }: LayoutProps) => {
   return (
-    <div className="flex flex-col h-full w-full bg-gray-95 dark:bg-brand-10">
+    <div 
+      className="w-full bg-gray-95 dark:bg-brand-10" 
+      style={{ 
+        height: '100vh', 
+        position: 'relative',
+        overflow: 'hidden'
+      }}
+    >
       <Header title={title} />
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main 
+        className="overflow-y-auto" 
+        style={{ 
+          position: 'absolute',
+          top: '64px', // Header height
+          bottom: showNav ? '64px' : '0', // BottomNav height if shown
+          left: 0,
+          right: 0,
+          overflowY: 'auto',
+          WebkitOverflowScrolling: 'touch',
+          paddingBottom: '20px'
+        }}
+      >
         <div className="max-w-screen-lg mx-auto px-4 py-6">
           {children}
         </div>

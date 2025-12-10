@@ -43,23 +43,25 @@ function App() {
   }
 
   return (
-    <Routes>
-      {!isOnboarded ? (
-        <>
-          <Route path="/settings" element={<Settings isOnboarding={true} onComplete={() => setIsOnboarded(true)} />} />
-          <Route path="*" element={<Navigate to="/settings" replace />} />
-        </>
-      ) : (
-        <>
-          <Route path="/" element={<Home />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/chart" element={<ChartPage />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/input" element={<InputWizard />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </>
-      )}
-    </Routes>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+      <Routes>
+        {!isOnboarded ? (
+          <>
+            <Route path="/settings" element={<Settings isOnboarding={true} onComplete={() => setIsOnboarded(true)} />} />
+            <Route path="*" element={<Navigate to="/settings" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<Home />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/chart" element={<ChartPage />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/input" element={<InputWizard />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        )}
+      </Routes>
+    </div>
   );
 }
 

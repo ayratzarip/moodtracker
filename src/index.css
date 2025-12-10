@@ -51,7 +51,43 @@ body {
   width: 100vw;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
+}
+
+/* Ensure AppRoot and Routes have proper height for scrolling */
+/* Ensure AppRoot and Routes have proper height for scrolling */
+#root > * {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+#root > * > * {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+/* Override any overflow hidden from telegram-ui AppRoot */
+[data-tg-root],
+[data-tg-root] > *,
+[data-tg-root] > * > * {
+  height: 100% !important;
+  overflow: visible !important;
+  min-height: 0 !important;
+}
+
+/* Ensure Routes wrapper has proper height */
+#root > * > * > * {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  overflow: visible !important;
 }
 
 @layer components {
@@ -116,5 +152,20 @@ body {
   .list-item {
     @apply flex items-center justify-between py-4 px-0 border-b border-gray-90 
            dark:border-gray-35 last:border-b-0;
+  }
+
+  /* Ensure main content area can scroll */
+  main {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex: 1 1 0% !important;
+    min-height: 0 !important;
+  }
+
+  /* Ensure Layout container has proper height */
+  [class*="flex flex-col"][class*="h-full"] {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
   }
 }
