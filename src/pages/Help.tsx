@@ -1,18 +1,9 @@
 import Layout from '../components/layout/Layout';
-import VimeoEmbed from '../components/ui/VimeoEmbed';
 
 const Help = () => {
   return (
     <Layout title="Инструкция">
       <div className="flex flex-col gap-6">
-        {/* Video Section */}
-        <div className="card">
-          <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-4">
-            Видео-инструкция
-          </h2>
-          <VimeoEmbed videoId="76979871" />
-        </div>
-
         {/* Instructions Section */}
         <div className="card-lg">
           <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-6">
@@ -59,22 +50,164 @@ const Help = () => {
           </div>
         </div>
 
-        {/* About Bipolar Disorder */}
+        {/* Mood Rating Instructions */}
         <div className="card-lg">
           <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-4">
-            О биполярном расстройстве
+            ИНСТРУКЦИЯ ПО ОЦЕНКЕ НАСТРОЕНИЯ
           </h2>
-          <p className="text-caption mb-4">
-            Биполярное аффективное расстройство (БАР) характеризуется чередованием
-            фаз депрессии и мании/гипомании. Регулярное отслеживание настроения
-            помогает:
+          <p className="text-body text-gray-0 dark:text-gray-100 mb-6">
+            Используйте эту шкалу, чтобы ежедневно фиксировать уровень энергии и настроение. Будьте честны с собой — это поможет отследить динамику.
           </p>
-          <ul className="text-caption space-y-2 list-disc list-inside">
-            <li>Выявлять паттерны и триггеры изменений настроения</li>
-            <li>Предсказывать наступление фаз</li>
-            <li>Оценивать эффективность лечения</li>
-            <li>Улучшать коммуникацию с врачом</li>
-          </ul>
+
+          {/* ЗОНА ПОДЪЕМА */}
+          <div className="mb-8">
+            <h3 className="text-h2 text-gray-0 dark:text-gray-100 mb-3">
+              ЗОНА ПОДЪЕМА (МАНИЯ/ГИПОМАНИЯ)
+            </h3>
+            <p className="text-caption mb-4">
+              Оцениваем: энергию, скорость мыслей, сон, импульсивность.
+            </p>
+            
+            <div className="space-y-4">
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-brand-70 font-bold">+5:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Тяжелая мания</span>
+                </div>
+                <p className="text-caption">
+                  Полная потеря контроля, бред, галлюцинации. Отсутствие сна. Агрессия или опасное поведение.
+                </p>
+                <p className="text-caption font-semibold text-red-600 dark:text-red-400 mt-1">
+                  Требуется экстренная помощь.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-brand-70 font-bold">+4:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Выраженная мания</span>
+                </div>
+                <p className="text-caption">
+                  Ощущение «на вершине мира», быстрая речь, рискованные поступки (траты, гонки). Сон 1–2 часа, усталости нет.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-brand-70 font-bold">+3:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Умеренная мания</span>
+                </div>
+                <p className="text-caption">
+                  Мысли скачут, много начатых и брошенных дел. Сильная раздражительность или эйфория. Сна меньше нормы на 2–3 часа.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-brand-70 font-bold">+2:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Гипомания (Продуктивность)</span>
+                </div>
+                <p className="text-caption">
+                  Вы — душа компании. Креативность на пике, уверенность в себе. Сна нужно меньше, но вы высыпаетесь.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-brand-70 font-bold">+1:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Легкий подъем</span>
+                </div>
+                <p className="text-caption">
+                  Жизнь кажется легкой и приятной. Чуть больше энергии, чем обычно. Просто хороший день.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* ЗОНА РАВНОВЕСИЯ */}
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-2xl">➖</span>
+              <h3 className="text-h2 text-gray-0 dark:text-gray-100">
+                ЗОНА РАВНОВЕСИЯ
+              </h3>
+            </div>
+            
+            <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">0:</span>
+                <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Эутимия (Норма)</span>
+              </div>
+              <p className="text-caption">
+                Ровное состояние. Эмоции адекватны ситуации. Нет проблем со сном и делами.
+              </p>
+            </div>
+          </div>
+
+          {/* ЗОНА СПАДА */}
+          <div>
+            <h3 className="text-h2 text-gray-0 dark:text-gray-100 mb-3">
+              ЗОНА СПАДА (ДЕПРЕССИЯ)
+            </h3>
+            <p className="text-caption mb-4">
+              Оцениваем: апатию, тоску, заторможенность.
+            </p>
+            
+            <div className="space-y-4">
+              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-1:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Легкий спад</span>
+                </div>
+                <p className="text-caption">
+                  Ощущение, что «батарейка садится». Дела делаются без энтузиазма. Желание побыть одному.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-2:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Умеренная депрессия</span>
+                </div>
+                <p className="text-caption">
+                  Дела «через не хочу». Тревога, чувство вины. Не хочется отвечать на звонки. Трудно концентрироваться.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-3:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Средне-тяжелая депрессия</span>
+                </div>
+                <p className="text-caption">
+                  Сил хватает только на еду и гигиену. Учеба/работа страдают. Бессонница или сонливость. Чувство никчемности.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-4:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Тяжелая депрессия</span>
+                </div>
+                <p className="text-caption">
+                  С трудом встаете с постели. Душевная боль или пустота. Навязчивые мысли о смерти, потеря интереса ко всему.
+                </p>
+              </div>
+
+              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-5:</span>
+                  <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Крайне тяжелая депрессия</span>
+                </div>
+                <p className="text-caption">
+                  Полная обездвиженность или невыносимое возбуждение от боли. Отказ от еды. Конкретные суицидальные планы.
+                </p>
+                <p className="text-caption font-semibold text-red-600 dark:text-red-400 mt-1">
+                  Требуется немедленная госпитализация.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Tips */}
