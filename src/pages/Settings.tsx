@@ -34,8 +34,17 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
     setSaving(true);
     try {
       const tg = window.Telegram?.WebApp;
-      const userId = tg?.initDataUnsafe?.user?.id || 0;
+      const userId = tg?.initDataUnsafe?.user?.id;
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      // Проверяем, что userId получен
+      if (!userId) {
+        console.error('User ID not available. Telegram WebApp may not be initialized.');
+        alert('Ошибка: не удалось получить ID пользователя. Убедитесь, что приложение открыто в Telegram.');
+        return;
+      }
+
+      console.log('Setting up reminders for user:', userId, 'at time:', time);
 
       // Save settings to CloudStorage
       await storageService.saveUserSettings({
@@ -50,9 +59,11 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
           time: time,
           timezone: timezone,
         });
+        console.log('Reminders setup completed successfully');
       } catch (error) {
         console.error('Error setting up reminder:', error);
-        // Continue anyway - user can retry later
+        // Показываем предупреждение, но продолжаем работу
+        alert('Настройки сохранены, но возникла проблема с установкой напоминаний. Попробуйте сохранить еще раз.');
       }
 
       if (isOnboarding && onComplete) {

@@ -14,26 +14,41 @@ export function setReminder(chatId: number, text: string, dateObj: Date): Promis
     return Promise.reject(new Error('Google Apps Script URL is not configured'));
   }
 
-  // Превращаем дату в timestamp
+  // Превращаем дату в timestamp (миллисекунды)
   const time = dateObj.getTime();
+
+  const payload = {
+    chat_id: chatId,
+    text: text,
+    time: time
+  };
+
+  console.log('Sending reminder to Google Apps Script:', {
+    url: GOOGLE_SCRIPT_URL,
+    payload: payload,
+    date: dateObj.toISOString(),
+    timestamp: time
+  });
 
   return fetch(GOOGLE_SCRIPT_URL, {
     method: 'POST',
-    mode: 'no-cors', // Важно для Google Apps Script
+    mode: 'no-cors', // Важно для Google Apps Script (не позволяет читать ответ, но отправляет данные)
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      chat_id: chatId,
-      text: text,
-      time: time
-    })
+    body: JSON.stringify(payload)
   })
   .then(() => {
-    console.log('Напоминание установлено!');
+    console.log('Напоминание отправлено в Google Apps Script:', {
+      chatId,
+      text,
+      time: dateObj.toISOString(),
+      timestamp: time
+    });
+    // При mode: 'no-cors' мы не можем проверить ответ, но запрос отправлен
   })
   .catch(err => {
-    console.error('Ошибка при установке напоминания:', err);
+    console.error('Ошибка при отправке напоминания в Google Apps Script:', err);
     throw err;
   });
 }
