@@ -7,26 +7,6 @@ export interface NotificationSettings {
 }
 
 /**
- * Вычисляет следующую дату с указанным временем
- * @param timeString - Время в формате "HH:MM"
- * @returns Date объект с указанным временем на сегодня или завтра
- */
-function getNextReminderDate(timeString: string): Date {
-  const [hours, minutes] = timeString.split(':').map(Number);
-  const now = new Date();
-  const reminderDate = new Date();
-  
-  reminderDate.setHours(hours, minutes, 0, 0);
-  
-  // Если время уже прошло сегодня, планируем на завтра
-  if (reminderDate <= now) {
-    reminderDate.setDate(reminderDate.getDate() + 1);
-  }
-  
-  return reminderDate;
-}
-
-/**
  * Планирует ежедневные напоминания на указанное количество дней вперед
  * @param chatId - ID чата пользователя
  * @param timeString - Время в формате "HH:MM"
