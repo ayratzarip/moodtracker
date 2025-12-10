@@ -1,6 +1,4 @@
-// Google Apps Script webhook integration
-// Set this to your actual Google Apps Script URL or leave empty to disable
-const GAS_WEBHOOK_URL = import.meta.env.VITE_GAS_WEBHOOK_URL || 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+import { setReminder } from '../api';
 
 export interface NotificationSettings {
   chatId: number;
@@ -8,31 +6,85 @@ export interface NotificationSettings {
   timezone: string;
 }
 
-export async function setupReminder(settings: NotificationSettings): Promise<void> {
-  // Skip if URL is not configured (contains placeholder)
-  if (!GAS_WEBHOOK_URL || GAS_WEBHOOK_URL.includes('YOUR_SCRIPT_ID')) {
-    console.warn('Google Apps Script webhook URL is not configured. Skipping reminder setup.');
-    return;
+/**
+ * Вычисляет следующую дату с указанным временем
+ * @param timeString - Время в формате "HH:MM"
+ * @returns Date объект с указанным временем на сегодня или завтра
+ */
+function getNextReminderDate(timeString: string): Date {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  const now = new Date();
+  const reminderDate = new Date();
+  
+  reminderDate.setHours(hours, minutes, 0, 0);
+  
+  // Если время уже прошло сегодня, планируем на завтра
+  if (reminderDate <= now) {
+    reminderDate.setDate(reminderDate.getDate() + 1);
   }
+  
+  return reminderDate;
+}
 
-  try {
-    const response = await fetch(GAS_WEBHOOK_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(settings),
-    });
-
-    if (!response.ok) {
-      // Log error but don't throw - allow app to continue working
-      const errorText = await response.text().catch(() => 'Unknown error');
-      console.error('Failed to setup reminder:', response.status, errorText);
-      // Don't throw error - app should work even if notifications fail
-      return;
+/**
+ * Планирует ежедневные напоминания на указанное количество дней вперед
+ * @param chatId - ID чата пользователя
+ * @param timeString - Время в формате "HH:MM"
+ * @param daysAhead - Количество дней для планирования (по умолчанию 14)
+ * @param reminderText - Текст напоминания
+ */
+async function scheduleDailyReminders(
+  chatId: number,
+  timeString: string,
+  daysAhead: number = 14,
+  reminderText: string = 'Напоминание: оцените ваше настроение за сегодня'
+): Promise<void> {
+  const [hours, minutes] = timeString.split(':').map(Number);
+  let scheduledCount = 0;
+  
+  // Планируем напоминания на каждый день
+  for (let i = 0; i < daysAhead; i++) {
+    const reminderDate = new Date();
+    reminderDate.setDate(reminderDate.getDate() + i);
+    reminderDate.setHours(hours, minutes, 0, 0);
+    
+    // Пропускаем прошедшие даты
+    if (reminderDate <= new Date()) {
+      continue;
     }
+    
+    try {
+      await setReminder(chatId, reminderText, reminderDate);
+      scheduledCount++;
+      // Небольшая задержка между запросами, чтобы не перегружать сервер
+      await new Promise(resolve => setTimeout(resolve, 100));
+    } catch (error) {
+      console.error(`Ошибка при планировании напоминания на ${reminderDate.toLocaleString()}:`, error);
+      // Продолжаем планировать остальные напоминания даже при ошибке
+    }
+  }
+  
+  console.log(`Запланировано ${scheduledCount} ежедневных напоминаний`);
+}
 
-    return await response.json();
+/**
+ * Настраивает ежедневные напоминания для пользователя
+ * Планирует напоминания на ближайшие 14 дней
+ * Примечание: Google Apps Script должен сам управлять повторяющимися напоминаниями
+ * или эта функция должна вызываться периодически для обновления расписания
+ * 
+ * @param settings - Настройки напоминаний
+ */
+export async function setupReminder(settings: NotificationSettings): Promise<void> {
+  try {
+    // Планируем напоминания на 14 дней вперед
+    // Google Apps Script должен обрабатывать эти напоминания и отправлять их в Telegram
+    await scheduleDailyReminders(
+      settings.chatId,
+      settings.time,
+      14,
+      'Напоминание: оцените ваше настроение за сегодня'
+    );
   } catch (error) {
     // Log error but don't throw - allow app to continue working
     console.error('Error setting up reminder:', error);
