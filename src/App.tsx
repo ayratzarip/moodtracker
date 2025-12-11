@@ -15,6 +15,8 @@ function App() {
     const tg = window.Telegram?.WebApp;
     if (tg) {
       tg.ready();
+      // Разворачиваем WebApp на весь экран для лучшего UX
+      tg.expand();
     }
 
     // Check onboarding status
