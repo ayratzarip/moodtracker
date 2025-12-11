@@ -52,7 +52,7 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
         onboarded: true,
       });
 
-      // Send to Google Apps Script
+      // Отправка настроек напоминаний в Yandex Cloud
       try {
         await setupReminder({
           chatId: userId,

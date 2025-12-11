@@ -66,15 +66,14 @@ async function scheduleDailyReminders(
 /**
  * Настраивает ежедневные напоминания для пользователя
  * Планирует напоминания на ближайшие 14 дней
- * Примечание: Google Apps Script должен сам управлять повторяющимися напоминаниями
- * или эта функция должна вызываться периодически для обновления расписания
+ * Отправляет запросы в Yandex Cloud Function для установки напоминаний
  * 
  * @param settings - Настройки напоминаний
  */
 export async function setupReminder(settings: NotificationSettings): Promise<void> {
   try {
     // Планируем напоминания на 14 дней вперед
-    // Google Apps Script должен обрабатывать эти напоминания и отправлять их в Telegram
+    // Yandex Cloud Function обрабатывает эти напоминания и отправляет их в Telegram
     await scheduleDailyReminders(
       settings.chatId,
       settings.time,

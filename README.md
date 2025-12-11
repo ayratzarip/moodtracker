@@ -3,7 +3,7 @@
 ## 1. Обзор проекта (Project Overview)
 Мы создаем **Telegram Mini App (TMA)** для трекинга настроения пациентов с биполярным аффективным расстройством (БАР).
 **Главная цель:** Максимально простой, не отвлекающий интерфейс для ежедневной оценки настроения (шкала от -5 до +5) и заметок.
-**Ключевая особенность:** Использование `Telegram CloudStorage` для хранения данных (без собственного БД) и `Google Apps Script` для отправки напоминаний (без полноценного бэкенда).
+**Ключевая особенность:** Использование `Telegram CloudStorage` для хранения данных (без собственного БД) и `Yandex Cloud Functions` для отправки напоминаний (без полноценного бэкенда).
 
 ## 2. Технологический стек (Tech Stack)
 Используй этот стек при генерации кода:
@@ -14,7 +14,7 @@
 *   **Routing:** React Router DOM (для навигации внизу экрана).
 *   **Charts:** Recharts (для визуализации графика).
 *   **Telegram SDK:** `@twa-dev/sdk` (или стандартный `window.Telegram.WebApp`).
-*   **Backend (Notifications):** Google Apps Script (будет развернут отдельно, приложение просто шлет туда `chat_id` и время).
+*   **Backend (Notifications):** Yandex Cloud Functions (приложение отправляет `chat_id`, время и текст напоминания).
 
 ## 3. Структура данных (Data Structure)
 Данные хранятся в **Telegram CloudStorage**.
@@ -83,8 +83,7 @@
 ### 5.3. Экран Напоминаний (Settings)
 *   При самом первом запуске приложения этот экран показывается принудительно.
 *   **UI:** Выбор времени (Time Picker).
-*   **Логика:** При сохранении времени, приложение отправляет запрос (fetch) на Google Apps Script Webhook URL. В теле запроса: `{ chatId: TG_USER_ID, time: "HH:MM", timezone: "..." }`.
-*   *Примечание для AI:* Сгенерируй моковый URL для GAS, который можно будет заменить в конфиге.
+*   **Логика:** При сохранении времени, приложение отправляет запрос (fetch) на Yandex Cloud Function URL. В теле запроса для каждого запланированного напоминания: `{ chat_id: TG_USER_ID, remind_at: "2023-12-10T15:00:00Z", text: "..." }`.
 
 ### 5.4. Экран Графика (Chart)
 *   **Проверка платформы:** Используем `Telegram.WebApp.platform`.
@@ -109,11 +108,11 @@
     3. Используй десктоп для анализа графика.
     4. Используй кнопку AI для экспорта данных врачу или в ChatGPT.
 
-## 6. Интеграция с Google Apps Script (Концепт)
-*В коде приложения нужен только API Service для вызова вебхука.*
-Логика GAS (для справки AI):
-*   Скрипт принимает POST запрос с ID пользователя и временем.
-*   Скрипт устанавливает Trigger, который раз в сутки отправляет сообщение через Telegram Bot API:
+## 6. Интеграция с Yandex Cloud Functions
+*В коде приложения используется API Service для вызова функции.*
+Логика Yandex Cloud Function:
+*   Функция принимает POST запрос с данными напоминания: `{ chat_id, remind_at, text }`.
+*   Функция планирует напоминания и отправляет их в Telegram через Bot API в указанное время:
     *   Текст: "Оцени, как прошел сегодняшний день?"
     *   Кнопка (Inline Keyboard): Launch Mini App.
 
@@ -147,7 +146,7 @@ src/
     Help.tsx
   services/
     storage.ts (CloudStorage wrapper)
-    notifications.ts (GAS Webhook wrapper)
+    notifications.ts (Yandex Cloud Functions integration)
     aiExport.ts (Data formatting logic)
   App.tsx
   main.tsx

@@ -1,54 +1,47 @@
-// URL от Google Apps Script
-const GOOGLE_SCRIPT_URL = import.meta.env.VITE_GOOGLE_SCRIPT_URL || 'https://script.google.com/macros/s/AKfycby2U9wd2WUtJWGFcg0joCayHowm4tzUn1c61eA5rKf9B3fi8p8XvuC_ioHW_kX9W8smEw/exec';
+// URL функции Yandex Cloud
+const YANDEX_CLOUD_FUNCTION_URL = 'https://functions.yandexcloud.net/d4e9hhkjomcv7i65lmqn';
 
 /**
- * Устанавливает напоминание через Google Apps Script
+ * Устанавливает напоминание через Yandex Cloud Function
  * @param chatId - ID чата пользователя в Telegram
  * @param text - Текст напоминания
  * @param dateObj - Дата и время напоминания
  */
 export function setReminder(chatId: number, text: string, dateObj: Date): Promise<void> {
-  // Проверяем, что URL настроен
-  if (!GOOGLE_SCRIPT_URL) {
-    console.warn('Google Apps Script URL is not configured. Skipping reminder setup.');
-    return Promise.reject(new Error('Google Apps Script URL is not configured'));
-  }
+  // Преобразуем дату в ISO строку (формат YYYY-MM-DDTHH:mm:ssZ)
+  const remindAt = dateObj.toISOString();
 
-  // Превращаем дату в timestamp (миллисекунды)
-  const time = dateObj.getTime();
-
-  const payload = {
+  const reminderData = {
     chat_id: chatId,
-    text: text,
-    time: time
+    remind_at: remindAt,
+    text: text
   };
 
-  console.log('Sending reminder to Google Apps Script:', {
-    url: GOOGLE_SCRIPT_URL,
-    payload: payload,
-    date: dateObj.toISOString(),
-    timestamp: time
+  console.log('Sending reminder to Yandex Cloud:', {
+    url: YANDEX_CLOUD_FUNCTION_URL,
+    payload: reminderData,
+    date: remindAt
   });
 
-  return fetch(GOOGLE_SCRIPT_URL, {
+  return fetch(YANDEX_CLOUD_FUNCTION_URL, {
     method: 'POST',
-    mode: 'no-cors', // Важно для Google Apps Script (не позволяет читать ответ, но отправляет данные)
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(reminderData)
   })
-  .then(() => {
-    console.log('Напоминание отправлено в Google Apps Script:', {
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    console.log('Напоминание отправлено в Yandex Cloud:', {
       chatId,
       text,
-      time: dateObj.toISOString(),
-      timestamp: time
+      remindAt
     });
-    // При mode: 'no-cors' мы не можем проверить ответ, но запрос отправлен
   })
   .catch(err => {
-    console.error('Ошибка при отправке напоминания в Google Apps Script:', err);
+    console.error('Ошибка при отправке напоминания в Yandex Cloud:', err);
     throw err;
   });
 }

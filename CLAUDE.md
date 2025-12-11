@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Routing:** React Router DOM (bottom navigation)
 - **Charts:** Recharts (for mood visualization)
 - **Telegram SDK:** `@twa-dev/sdk` or `window.Telegram.WebApp`
-- **Backend (Notifications):** Google Apps Script (separate deployment for reminders)
+- **Backend (Notifications):** Yandex Cloud Functions (serverless function for reminders)
 
 ## Data Storage Architecture
 
@@ -69,7 +69,7 @@ User settings:
 
 **Settings Screen:**
 - Shows on first app launch (onboarding)
-- Sends webhook to Google Apps Script with: `{ chatId, time, timezone }`
+- Sends requests to Yandex Cloud Function with: `{ chat_id, remind_at, text }` for each scheduled reminder
 
 ## File Structure
 
@@ -92,7 +92,7 @@ src/
     Help.tsx              # Instructions and video
   services/
     storage.ts            # CloudStorage wrapper (month-grouped keys)
-    notifications.ts      # Google Apps Script webhook integration
+    notifications.ts      # Yandex Cloud Functions integration
     aiExport.ts           # Data export formatting for AI analysis
 ```
 
@@ -111,7 +111,7 @@ Since this is a new project without package.json yet, typical Vite + React comma
 3. **CloudStorage Service:** Must handle month-based key grouping (`mood_YYYY_MM`) to avoid key limits
 4. **Mood Scale:** Always use integers from -5 to +5 (11 total values including 0)
 5. **AI Export Prompt Template:** Include standardized prompt with exported data for bipolar disorder analysis
-6. **Google Apps Script:** Mock webhook URL in config for notifications setup
+6. **Yandex Cloud Functions:** Function URL configured in api.ts for notifications setup
 
 ## Design Philosophy
 
@@ -156,9 +156,9 @@ Since this is a new project without package.json yet, typical Vite + React comma
    - Error handling for storage operations
 
 5. **Created notification service** (`src/services/notifications.ts`):
-   - Google Apps Script webhook integration
+   - Yandex Cloud Functions integration
    - setupReminder function with chatId, time, timezone
-   - Mock webhook URL: `https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec`
+   - Function URL: `https://functions.yandexcloud.net/d4e9hhkjomcv7i65lmqn`
 
 6. **Built AI export service** (`src/services/aiExport.ts`):
    - generateAIExport function with Russian prompt template
@@ -195,7 +195,7 @@ Since this is a new project without package.json yet, typical Vite + React comma
 11. **Settings page** (`src/pages/Settings.tsx`):
     - Time picker for reminder configuration
     - Forced display on first launch (onboarding)
-    - Saves to CloudStorage and sends to GAS webhook
+    - Saves to CloudStorage and sends to Yandex Cloud Function
     - Gets user timezone automatically
     - Shows save confirmation
 
@@ -242,12 +242,12 @@ Since this is a new project without package.json yet, typical Vite + React comma
 - ✅ Onboarding flow with Settings
 - ✅ Bottom navigation with active states
 - ✅ Telegram theme integration
-- ✅ GAS webhook integration for reminders
+- ✅ Yandex Cloud Functions integration for reminders
 - ✅ Modal confirmations for editing entries
 - ✅ Responsive design with Tailwind
 
 ### Configuration Notes
-- **Google Apps Script URL**: Located in `src/services/notifications.ts` - replace `YOUR_SCRIPT_ID` with actual script ID
+- **Yandex Cloud Function URL**: Located in `src/api.ts` - configured as `https://functions.yandexcloud.net/d4e9hhkjomcv7i65lmqn`
 - **Vimeo Video ID**: Currently set to `76979871` in Help page - update with actual instructional video
 - **Theme Variables**: Telegram theme CSS variables are defined in `src/index.css` with fallback values
 - **Platform Detection**: Checks for `macos`, `tdesktop`, `web`, `webk`, `weba` as desktop platforms
