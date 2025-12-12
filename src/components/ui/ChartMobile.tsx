@@ -1,5 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
 import { MoodEntry } from '../../types';
+import ChartZoomPan from './ChartZoomPan';
 
 interface ChartMobileProps {
   data: Record<string, MoodEntry>;
@@ -40,31 +41,39 @@ const ChartMobile = ({ data }: ChartMobileProps) => {
         </p>
       </div>
 
-      <div>
-        <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="hsl(0, 0%, 85%)" />
-            <XAxis
-              dataKey="date"
-              tick={{ fontSize: 12, fill: 'hsl(0, 0%, 60%)' }}
-              stroke="hsl(0, 0%, 85%)"
-            />
-            <YAxis
-              domain={[-5, 5]}
-              ticks={[-5, -3, 0, 3, 5]}
-              tick={{ fontSize: 12, fill: 'hsl(0, 0%, 60%)' }}
-              stroke="hsl(0, 0%, 85%)"
-            />
-            <Tooltip content={<CustomTooltip />} />
-            <Line
-              type="monotone"
-              dataKey="score"
-              stroke="hsl(222, 76%, 70%)"
-              strokeWidth={2}
-              dot={{ fill: 'hsl(222, 76%, 70%)', r: 4 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      <ChartZoomPan minScale={0.5} maxScale={3} initialScale={1}>
+        <div style={{ width: '100%', minWidth: '600px', height: '300px' }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="hsl(0, 0%, 85%)" />
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 12, fill: 'hsl(0, 0%, 60%)' }}
+                stroke="hsl(0, 0%, 85%)"
+              />
+              <YAxis
+                domain={[-5, 5]}
+                ticks={[-5, -3, 0, 3, 5]}
+                tick={{ fontSize: 12, fill: 'hsl(0, 0%, 60%)' }}
+                stroke="hsl(0, 0%, 85%)"
+              />
+              <Tooltip content={<CustomTooltip />} />
+              <Line
+                type="monotone"
+                dataKey="score"
+                stroke="hsl(222, 76%, 70%)"
+                strokeWidth={2}
+                dot={{ fill: 'hsl(222, 76%, 70%)', r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </ChartZoomPan>
+      
+      <div className="card mt-2">
+        <p className="text-caption text-center">
+          💡 Используйте жесты для масштабирования (pinch) и перемещения графика (swipe)
+        </p>
       </div>
     </div>
   );
