@@ -52,7 +52,7 @@ const ChartMobile = ({ data }: ChartMobileProps) => {
       
       <div className="card mt-2">
         <p className="text-caption text-center">
-          💡 Используйте жесты для масштабирования (pinch) и перемещения графика (swipe)
+          💡 Используйте жест pinch для масштабирования графика
         </p>
       </div>
     </div>
