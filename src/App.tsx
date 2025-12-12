@@ -13,6 +13,8 @@ function App() {
   useEffect(() => {
     // Initialize Telegram WebApp
     const tg = window.Telegram?.WebApp;
+    let cleanup: (() => void) | null = null;
+
     if (tg) {
       tg.ready();
       // Разворачиваем WebApp на весь экран для лучшего UX
@@ -35,8 +37,8 @@ function App() {
         tg.onEvent('homeScreenAdded', handleHomeScreenAdded);
         tg.onEvent('homeScreenChecked', handleHomeScreenChecked);
 
-        // Очистка подписок при размонтировании
-        return () => {
+        // Сохраняем функцию очистки
+        cleanup = () => {
           if (tg.offEvent) {
             tg.offEvent('homeScreenAdded', handleHomeScreenAdded);
             tg.offEvent('homeScreenChecked', handleHomeScreenChecked);
@@ -58,6 +60,13 @@ function App() {
         }
         setIsOnboarded(false);
       });
+
+    // Возвращаем функцию очистки из useEffect
+    return () => {
+      if (cleanup) {
+        cleanup();
+      }
+    };
   }, []);
 
   if (isOnboarded === null) {
