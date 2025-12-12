@@ -52,10 +52,10 @@ const Help = () => {
 
         {/* Mood Rating Instructions */}
         <div className="card-lg">
-          <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-4">
+          <h2 className="text-h2 text-gray-0 dark:text-gray-100 mb-6">
             ИНСТРУКЦИЯ ПО ОЦЕНКЕ НАСТРОЕНИЯ
           </h2>
-          <p className="text-body text-gray-0 dark:text-gray-100 mb-6">
+          <p className="text-caption mb-6">
             Используйте эту шкалу, чтобы ежедневно фиксировать уровень энергии и настроение. Будьте честны с собой — это поможет отследить динамику.
           </p>
 
@@ -126,16 +126,13 @@ const Help = () => {
 
           {/* ЗОНА РАВНОВЕСИЯ */}
           <div className="mb-8">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-2xl">➖</span>
-              <h3 className="text-h2 text-gray-0 dark:text-gray-100">
-                ЗОНА РАВНОВЕСИЯ
-              </h3>
-            </div>
+            <h3 className="text-h2 text-gray-0 dark:text-gray-100 mb-3">
+              ЗОНА РАВНОВЕСИЯ
+            </h3>
             
-            <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+            <div className="border-l-4 border-brand-70 pl-4 py-2">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">0:</span>
+                <span className="text-h2 text-brand-70 font-bold">0:</span>
                 <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Эутимия (Норма)</span>
               </div>
               <p className="text-caption">
@@ -154,9 +151,9 @@ const Help = () => {
             </p>
             
             <div className="space-y-4">
-              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-1:</span>
+                  <span className="text-h2 text-brand-70 font-bold">-1:</span>
                   <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Легкий спад</span>
                 </div>
                 <p className="text-caption">
@@ -164,9 +161,9 @@ const Help = () => {
                 </p>
               </div>
 
-              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-2:</span>
+                  <span className="text-h2 text-brand-70 font-bold">-2:</span>
                   <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Умеренная депрессия</span>
                 </div>
                 <p className="text-caption">
@@ -174,9 +171,9 @@ const Help = () => {
                 </p>
               </div>
 
-              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-3:</span>
+                  <span className="text-h2 text-brand-70 font-bold">-3:</span>
                   <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Средне-тяжелая депрессия</span>
                 </div>
                 <p className="text-caption">
@@ -184,9 +181,9 @@ const Help = () => {
                 </p>
               </div>
 
-              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-4:</span>
+                  <span className="text-h2 text-brand-70 font-bold">-4:</span>
                   <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Тяжелая депрессия</span>
                 </div>
                 <p className="text-caption">
@@ -194,9 +191,9 @@ const Help = () => {
                 </p>
               </div>
 
-              <div className="border-l-4 border-gray-60 dark:border-gray-60 pl-4 py-2">
+              <div className="border-l-4 border-brand-70 pl-4 py-2">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-h2 text-gray-60 dark:text-gray-60 font-bold">-5:</span>
+                  <span className="text-h2 text-brand-70 font-bold">-5:</span>
                   <span className="text-h2 text-gray-0 dark:text-gray-100 font-bold">Крайне тяжелая депрессия</span>
                 </div>
                 <p className="text-caption">
