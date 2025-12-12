@@ -34,7 +34,7 @@ const ChartZoomPan = ({
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.button === 0) { // Левая кнопка мыши
       setIsPanning(true);
-      setLastPanPoint({ x: e.clientX - translate.x, y: e.clientY - translate.y });
+      setLastPanPoint({ x: e.clientX - translate.x, y: 0 });
     }
   };
 
@@ -46,17 +46,14 @@ const ChartZoomPan = ({
       setIsPanning(true);
       setLastPanPoint({
         x: e.touches[0].clientX - translate.x,
-        y: e.touches[0].clientY - translate.y,
+        y: 0,
       });
     } else if (e.touches.length === 2) {
-      // Два пальца - начало масштабирования
+      // Два пальца - начало масштабирования (только горизонтальное)
       setIsPanning(false);
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
-      const distance = Math.hypot(
-        touch2.clientX - touch1.clientX,
-        touch2.clientY - touch1.clientY
-      );
+      const distance = Math.abs(touch2.clientX - touch1.clientX);
       setLastTouchDistance(distance);
     }
   };
@@ -65,19 +62,16 @@ const ChartZoomPan = ({
     e.preventDefault();
     
     if (e.touches.length === 1 && isPanning) {
-      // Один палец - панорамирование
+      // Один палец - панорамирование (только горизонтальное)
       setTranslate({
         x: e.touches[0].clientX - lastPanPoint.x,
-        y: e.touches[0].clientY - lastPanPoint.y,
+        y: 0,
       });
     } else if (e.touches.length === 2 && lastTouchDistance !== null) {
-      // Два пальца - масштабирование
+      // Два пальца - масштабирование (только горизонтальное)
       const touch1 = e.touches[0];
       const touch2 = e.touches[1];
-      const distance = Math.hypot(
-        touch2.clientX - touch1.clientX,
-        touch2.clientY - touch1.clientY
-      );
+      const distance = Math.abs(touch2.clientX - touch1.clientX);
       
       const scaleChange = distance / lastTouchDistance;
       setScale(prev => {
@@ -99,7 +93,7 @@ const ChartZoomPan = ({
       const mouseMoveHandler = (e: MouseEvent) => {
         setTranslate({
           x: e.clientX - lastPanPoint.x,
-          y: e.clientY - lastPanPoint.y,
+          y: 0,
         });
       };
 
@@ -129,8 +123,9 @@ const ChartZoomPan = ({
     >
       <div
         style={{
-          transform: `translate(${translate.x}px, ${translate.y}px) scale(${scale})`,
+          transform: `translateX(${translate.x}px) scaleX(${scale})`,
           transformOrigin: '0 0',
+          height: '100%',
           transition: isPanning || lastTouchDistance !== null ? 'none' : 'transform 0.1s ease-out',
         }}
       >

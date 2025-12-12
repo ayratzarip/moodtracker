@@ -1,6 +1,6 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from 'recharts';
+import { TooltipProps } from 'recharts';
 import { MoodEntry } from '../../types';
-import ChartZoomPan from './ChartZoomPan';
+import ChartWithFixedYAxis from './ChartWithFixedYAxis';
 
 interface ChartDesktopProps {
   data: Record<string, MoodEntry>;
@@ -39,35 +39,14 @@ const ChartDesktop = ({ data }: ChartDesktopProps) => {
 
   return (
     <>
-      <ChartZoomPan minScale={0.5} maxScale={4} initialScale={1}>
-        <div style={{ width: '100%', minWidth: chartData.length * 60 + 'px', height: '500px' }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" opacity={0.2} stroke="hsl(0, 0%, 85%)" />
-              <XAxis
-                dataKey="date"
-                tick={{ fontSize: 14, fill: 'hsl(0, 0%, 60%)' }}
-                stroke="hsl(0, 0%, 85%)"
-              />
-              <YAxis
-                domain={[-5, 5]}
-                ticks={[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]}
-                tick={{ fontSize: 14, fill: 'hsl(0, 0%, 60%)' }}
-                stroke="hsl(0, 0%, 85%)"
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Line
-                type="monotone"
-                dataKey="score"
-                stroke="hsl(222, 76%, 70%)"
-                strokeWidth={3}
-                dot={{ fill: 'hsl(222, 76%, 70%)', r: 5 }}
-                activeDot={{ r: 7 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </ChartZoomPan>
+      <ChartWithFixedYAxis
+        chartData={chartData}
+        isMobile={false}
+        CustomTooltip={CustomTooltip}
+        minScale={0.5}
+        maxScale={4}
+        initialScale={1}
+      />
       
       <div className="card mt-2">
         <p className="text-caption text-center">
