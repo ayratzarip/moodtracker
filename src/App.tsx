@@ -16,7 +16,33 @@ function App() {
     if (tg) {
       tg.ready();
       // Разворачиваем WebApp на весь экран для лучшего UX
-      tg.expand();
+      if (typeof tg.expand === 'function') {
+        tg.expand();
+      }
+
+      // Подписываемся на события HomeScreen (Bot API 8.0+)
+      if (tg.onEvent) {
+        // Событие успешного добавления на главный экран
+        const handleHomeScreenAdded = () => {
+          console.log('Mini App успешно добавлена на главный экран');
+        };
+
+        // Событие проверки статуса главного экрана
+        const handleHomeScreenChecked = (data: { status: string }) => {
+          console.log('Статус главного экрана:', data.status);
+        };
+
+        tg.onEvent('homeScreenAdded', handleHomeScreenAdded);
+        tg.onEvent('homeScreenChecked', handleHomeScreenChecked);
+
+        // Очистка подписок при размонтировании
+        return () => {
+          if (tg.offEvent) {
+            tg.offEvent('homeScreenAdded', handleHomeScreenAdded);
+            tg.offEvent('homeScreenChecked', handleHomeScreenChecked);
+          }
+        };
+      }
     }
 
     // Check onboarding status

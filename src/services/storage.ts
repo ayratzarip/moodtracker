@@ -10,7 +10,13 @@ declare global {
           getItems: (keys: string[], callback: (error: string | null, values?: Record<string, string>) => void) => void;
         };
         ready: () => void;
+        expand: () => void;
         platform: string;
+        // Bot API 8.0+ - HomeScreen Shortcuts
+        addToHomeScreen?: () => void;
+        checkHomeScreenStatus?: (callback?: (status: HomeScreenStatus) => void) => void;
+        onEvent?: (eventType: string, eventHandler: (...args: any[]) => void) => void;
+        offEvent?: (eventType: string, eventHandler: (...args: any[]) => void) => void;
         initDataUnsafe: {
           user?: {
             id: number;
@@ -21,6 +27,8 @@ declare global {
     };
   }
 }
+
+export type HomeScreenStatus = 'unsupported' | 'unknown' | 'added' | 'missed';
 
 const tg = window.Telegram?.WebApp;
 

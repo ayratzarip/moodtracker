@@ -4,6 +4,7 @@ import Layout from '../components/layout/Layout';
 import TimePicker from '../components/ui/TimePicker';
 import { storageService } from '../services/storage';
 import { setupReminder } from '../services/notifications';
+import type { HomeScreenStatus } from '../services/storage';
 
 interface SettingsProps {
   isOnboarding?: boolean;
@@ -14,9 +15,11 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
   const [time, setTime] = useState('20:00');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [homeScreenStatus, setHomeScreenStatus] = useState<HomeScreenStatus | null>(null);
 
   useEffect(() => {
     loadSettings();
+    checkHomeScreenStatus();
   }, []);
 
   const loadSettings = async () => {
@@ -29,6 +32,44 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
       setLoading(false);
     }
   };
+
+  const checkHomeScreenStatus = () => {
+    const tg = window.Telegram?.WebApp;
+    if (tg?.checkHomeScreenStatus) {
+      tg.checkHomeScreenStatus((status: HomeScreenStatus) => {
+        setHomeScreenStatus(status);
+        console.log('HomeScreen status:', status);
+      });
+    }
+  };
+
+  const handleAddToHomeScreen = () => {
+    const tg = window.Telegram?.WebApp;
+    if (tg?.addToHomeScreen) {
+      tg.addToHomeScreen();
+    } else {
+      alert('Функция добавления на главный экран недоступна в вашей версии Telegram.');
+    }
+  };
+
+  // Подписываемся на событие успешного добавления
+  useEffect(() => {
+    const tg = window.Telegram?.WebApp;
+    if (tg?.onEvent) {
+      const handleHomeScreenAdded = () => {
+        setHomeScreenStatus('added');
+        console.log('Mini App успешно добавлена на главный экран');
+      };
+
+      tg.onEvent('homeScreenAdded', handleHomeScreenAdded);
+
+      return () => {
+        if (tg.offEvent) {
+          tg.offEvent('homeScreenAdded', handleHomeScreenAdded);
+        }
+      };
+    }
+  }, []);
 
   const handleSave = async () => {
     setSaving(true);
@@ -119,6 +160,32 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
             спокойно оценить прошедший день.
           </p>
         </div>
+
+        {/* Кнопка добавления на главный экран */}
+        {homeScreenStatus !== null && homeScreenStatus !== 'added' && homeScreenStatus !== 'unsupported' && (
+          <div className="card-lg">
+            <h3 className="text-h2 text-gray-0 dark:text-gray-100 mb-2">
+              Добавить на главный экран
+            </h3>
+            <p className="text-caption mb-4">
+              Добавьте приложение на главный экран для быстрого доступа
+            </p>
+            <button
+              onClick={handleAddToHomeScreen}
+              className="btn-secondary w-full"
+            >
+              📱 Добавить на главный экран
+            </button>
+          </div>
+        )}
+
+        {homeScreenStatus === 'added' && (
+          <div className="card">
+            <p className="text-caption text-center">
+              ✅ Приложение уже добавлено на главный экран
+            </p>
+          </div>
+        )}
 
         <button
           onClick={handleSave}
