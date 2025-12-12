@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal, Spinner } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import { storageService } from '../services/storage';
+import { hapticFeedback, getBackButton, getMainButton } from '../utils/telegram';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -12,6 +13,12 @@ const Home = () => {
 
   useEffect(() => {
     checkTodayEntry();
+    
+    // Скрываем BackButton и MainButton на главной странице
+    const backButton = getBackButton();
+    const mainButton = getMainButton();
+    if (backButton?.hide) backButton.hide();
+    if (mainButton?.hide) mainButton.hide();
   }, []);
 
   const checkTodayEntry = async () => {
@@ -26,6 +33,7 @@ const Home = () => {
   };
 
   const handleButtonClick = () => {
+    hapticFeedback('impact', { style: 'medium' });
     if (hasEntry) {
       setShowModal(true);
     } else {
@@ -34,6 +42,7 @@ const Home = () => {
   };
 
   const handleEditConfirm = () => {
+    hapticFeedback('impact', { style: 'light' });
     setShowModal(false);
     navigate('/input');
   };

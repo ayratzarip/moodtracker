@@ -6,6 +6,7 @@ import ChartPage from './pages/ChartPage';
 import Help from './pages/Help';
 import InputWizard from './pages/InputWizard';
 import { storageService } from './services/storage';
+import { isVersionSupported } from './utils/telegram';
 
 function App() {
   const [isOnboarded, setIsOnboarded] = useState<boolean | null>(null);
@@ -23,7 +24,8 @@ function App() {
       }
 
       // Подписываемся на события HomeScreen (Bot API 8.0+)
-      if (tg.onEvent) {
+      // Используем проверку версии для обратной совместимости
+      if (isVersionSupported('8.0') && tg.onEvent) {
         // Событие успешного добавления на главный экран
         const handleHomeScreenAdded = () => {
           console.log('Mini App успешно добавлена на главный экран');

@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Spinner } from '@telegram-apps/telegram-ui';
 import Layout from '../components/layout/Layout';
 import MoodSlider from '../components/ui/MoodSlider';
 import { storageService } from '../services/storage';
 import { MoodEntry } from '../types';
+import { hapticFeedback, getBackButton, getMainButton } from '../utils/telegram';
 
 const InputWizard = () => {
   const navigate = useNavigate();
@@ -17,6 +18,87 @@ const InputWizard = () => {
     loadExistingEntry();
   }, []);
 
+  const handleNext = useCallback(() => {
+    hapticFeedback('impact', { style: 'light' });
+    setStep(2);
+  }, []);
+
+  const handleSave = useCallback(async () => {
+    try {
+      hapticFeedback('notification', { notificationType: 'success' });
+      const entry: MoodEntry = {
+        score,
+        note,
+        timestamp: Date.now(),
+      };
+      await storageService.saveTodayEntry(entry);
+      navigate('/');
+    } catch (error) {
+      console.error('Error saving entry:', error);
+      hapticFeedback('notification', { notificationType: 'error' });
+      alert('Ошибка при сохранении данных');
+    }
+  }, [score, note, navigate]);
+
+  const handleBack = useCallback(() => {
+    hapticFeedback('impact', { style: 'light' });
+    setStep(1);
+  }, []);
+
+  // Управление BackButton и MainButton
+  useEffect(() => {
+    const backButton = getBackButton();
+    const mainButton = getMainButton();
+    let backHandler: (() => void) | null = null;
+    let mainHandler: (() => void) | null = null;
+
+    if (step === 1) {
+      // Первый шаг - скрываем BackButton, показываем MainButton для "Далее"
+      if (backButton?.hide) backButton.hide();
+      
+      if (mainButton) {
+        if (mainButton.setText) mainButton.setText('Далее');
+        mainHandler = handleNext;
+        if (mainButton.onClick && mainHandler) {
+          mainButton.onClick(mainHandler);
+        }
+        if (mainButton.show) mainButton.show();
+        if (mainButton.enable) mainButton.enable();
+      }
+    } else {
+      // Второй шаг - показываем BackButton, MainButton для "Сохранить"
+      if (backButton) {
+        if (backButton.show) backButton.show();
+        backHandler = handleBack;
+        if (backButton.onClick && backHandler) {
+          backButton.onClick(backHandler);
+        }
+      }
+
+      if (mainButton) {
+        if (mainButton.setText) mainButton.setText('Сохранить');
+        mainHandler = handleSave;
+        if (mainButton.onClick && mainHandler) {
+          mainButton.onClick(mainHandler);
+        }
+        if (mainButton.show) mainButton.show();
+        if (mainButton.enable) mainButton.enable();
+      }
+    }
+
+    // Cleanup
+    return () => {
+      if (backButton && backHandler) {
+        if (backButton.offClick) backButton.offClick(backHandler);
+        if (backButton.hide) backButton.hide();
+      }
+      if (mainButton && mainHandler) {
+        if (mainButton.offClick) mainButton.offClick(mainHandler);
+        if (mainButton.hide) mainButton.hide();
+      }
+    };
+  }, [step, handleSave, handleBack, handleNext]);
+
   const loadExistingEntry = async () => {
     try {
       const entry = await storageService.getTodayEntry();
@@ -28,25 +110,6 @@ const InputWizard = () => {
       console.error('Error loading entry:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleNext = () => {
-    setStep(2);
-  };
-
-  const handleSave = async () => {
-    try {
-      const entry: MoodEntry = {
-        score,
-        note,
-        timestamp: Date.now(),
-      };
-      await storageService.saveTodayEntry(entry);
-      navigate('/');
-    } catch (error) {
-      console.error('Error saving entry:', error);
-      alert('Ошибка при сохранении данных');
     }
   };
 
@@ -68,12 +131,13 @@ const InputWizard = () => {
             <div className="card-lg flex-1 flex items-center justify-center">
               <MoodSlider value={score} onChange={setScore} />
             </div>
-            <button
-              onClick={handleNext}
-              className="btn-primary w-full"
-            >
-              Далее
-            </button>
+              <button
+                onClick={handleNext}
+                className="btn-primary w-full"
+                onTouchStart={() => hapticFeedback('selection')}
+              >
+                Далее
+              </button>
           </>
         ) : (
           <>
@@ -101,8 +165,9 @@ const InputWizard = () => {
                 Сохранить
               </button>
               <button
-                onClick={() => setStep(1)}
+                onClick={handleBack}
                 className="btn-secondary w-full"
+                onTouchStart={() => hapticFeedback('selection')}
               >
                 Назад
               </button>

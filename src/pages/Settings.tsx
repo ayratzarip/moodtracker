@@ -5,6 +5,7 @@ import TimePicker from '../components/ui/TimePicker';
 import { storageService } from '../services/storage';
 import { setupReminder } from '../services/notifications';
 import type { HomeScreenStatus } from '../services/storage';
+import { hapticFeedback, getBackButton, getMainButton } from '../utils/telegram';
 
 interface SettingsProps {
   isOnboarding?: boolean;
@@ -20,6 +21,12 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
   useEffect(() => {
     loadSettings();
     checkHomeScreenStatus();
+    
+    // Скрываем BackButton и MainButton на странице настроек
+    const backButton = getBackButton();
+    const mainButton = getMainButton();
+    if (backButton?.hide) backButton.hide();
+    if (mainButton?.hide) mainButton.hide();
   }, []);
 
   const loadSettings = async () => {
@@ -44,10 +51,12 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
   };
 
   const handleAddToHomeScreen = () => {
+    hapticFeedback('impact', { style: 'medium' });
     const tg = window.Telegram?.WebApp;
     if (tg?.addToHomeScreen) {
       tg.addToHomeScreen();
     } else {
+      hapticFeedback('notification', { notificationType: 'error' });
       alert('Функция добавления на главный экран недоступна в вашей версии Telegram.');
     }
   };
@@ -72,6 +81,7 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
   }, []);
 
   const handleSave = async () => {
+    hapticFeedback('impact', { style: 'medium' });
     setSaving(true);
     try {
       const tg = window.Telegram?.WebApp;
@@ -81,6 +91,7 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
       // Проверяем, что userId получен
       if (!userId) {
         console.error('User ID not available. Telegram WebApp may not be initialized.');
+        hapticFeedback('notification', { notificationType: 'error' });
         alert('Ошибка: не удалось получить ID пользователя. Убедитесь, что приложение открыто в Telegram.');
         return;
       }
@@ -101,8 +112,10 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
           timezone: timezone,
         });
         console.log('Reminders setup completed successfully');
+        hapticFeedback('notification', { notificationType: 'success' });
       } catch (error) {
         console.error('Error setting up reminder:', error);
+        hapticFeedback('notification', { notificationType: 'warning' });
         // Показываем предупреждение, но продолжаем работу
         alert('Настройки сохранены, но возникла проблема с установкой напоминаний. Попробуйте сохранить еще раз.');
       }
@@ -114,6 +127,7 @@ const Settings = ({ isOnboarding = false, onComplete }: SettingsProps) => {
       }
     } catch (error) {
       console.error('Error saving settings:', error);
+      hapticFeedback('notification', { notificationType: 'error' });
       alert('Ошибка при сохранении настроек');
     } finally {
       setSaving(false);
